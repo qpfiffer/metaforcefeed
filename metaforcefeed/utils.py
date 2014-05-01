@@ -25,7 +25,6 @@ def sign_up(connection, username, password, admin=False):
     pwhash = _hash_pw(username, password, salt)
     user = connection.get(_get_user_str(username))
 
-    import ipdb; ipdb.set_trace()
     if not user:
         new_user = {
             "username": username,
