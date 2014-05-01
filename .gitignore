@@ -1,0 +1,8 @@
+*.egg-info
+build/
+*.swp
+dist/
+*.kct
+*.pyc
+dependencies/kyotocabinet-1.2.76/
+dependencies/kyoto_python/
