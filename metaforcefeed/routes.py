@@ -15,10 +15,11 @@ def root():
     #TODO: Refactor this when prefix matching is done.
     all_items = g.db.get(ALL_ITEMS_LIST) or []
 
+    passed_items = []
     for item_key in all_items:
-        pass
+        passed_items.append(g.db.get(item_key))
 
-    return render_template("index.html")
+    return render_template("index.html", items=passed_items)
 
 @app.route("/submit", methods=['GET', 'POST'])
 def submit():
