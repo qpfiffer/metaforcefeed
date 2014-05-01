@@ -1,7 +1,9 @@
 from flask import g, request, current_app, Blueprint, render_template,\
         redirect, url_for, session
+from werkzeug.exceptions import BadRequestKeyError
 
 from metaforcefeed.cache import ol_view_cache
+from metaforcefeed.utils import sign_up, auth_user
 
 
 app = Blueprint('metaforcefeed', __name__, template_folder='templates')
@@ -35,6 +37,30 @@ def login():
 
 @app.route("/register", methods=['GET', 'POST'])
 def register():
+    error = ""
     if request.method == 'POST':
-        return redirect(url_for('metaforcefeed.root'))
-    return render_template("register.html")
+        try:
+            username = request.form['username']
+            password1 = request.form['password1']
+            password2 = request.form['password2']
+        except BadRequestKeyError:
+            error = "Some data didn't make it to the front."
+            return render_template("register.html", error=error)
+
+        if len(username) == 0:
+            error = "Must input username."
+            return render_template("register.html", error=error)
+
+        if password1 != password2:
+            error = "Passwords do not match."
+            return render_template("register.html", error=error)
+
+        created, user_obj = sign_up(g.db, username, password1)
+        if created:
+            session.permanent = True
+            session['username'] = user_obj['username']
+            return redirect(url_for('metaforcefeed.root'))
+        # Well something didn't work right.
+        error = user_obj
+
+    return render_template("register.html", error=error)

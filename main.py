@@ -5,10 +5,12 @@ from olegdb import OlegDB
 
 from metaforcefeed.routes import app as routes
 from metaforcefeed.utils import random_csrf, auth_user
+from metaforcefeed.conprocs import app as conprocs
 import sys, getopt, random, string
 
 app = Flask('metaforcefeed')
 app.register_blueprint(routes)
+app.register_blueprint(conprocs)
 app.config['CACHE'] = True
 app.session_interface = OlegDBSessionInterface()
 

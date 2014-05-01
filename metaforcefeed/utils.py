@@ -1,17 +1,42 @@
 from bcrypt import hashpw, gensalt
 
-USERS_PREFIX = "user"
+USERS_PREFIX = "users"
+def _get_user_str(username):
+    return "{}{}".format(USERS_PREFIX, username)
+
+def _hash_pw(username, pw, salt):
+    return hashpw("{}{}".format(username, pw), salt)
+
 def auth_user(connection, username, pw):
-    getstr = "{}{}".format(USERS_PREFIX, username)
+    getstr = _get_user_str(username)
 
     userobj = connection.get(getstr)
     if userobj and userobj['username'] == username:
         salt = userobj['salt']
-        sent_hash = hashpw("{}{}".format(username, pw), salt)
+        sent_hash = _hash_pw(username, pw, salt)
 
         if sent_hash == userobj['password']:
             return True
     return False
+
+def sign_up(connection, username, password, admin=False):
+    salt = gensalt()
+    pwhash = _hash_pw(username, password, salt)
+    user = connection.get(_get_user_str(username))
+
+    import ipdb; ipdb.set_trace()
+    if not user:
+        new_user = {
+            "username": username,
+            "password": pwhash,
+            "salt": salt,
+            "admin": admin
+        }
+        connection.set(_get_user_str(username), new_user)
+        return (True, new_user)
+    else:
+        return (False, "Username already taken.")
+    return (False, "Could not create user for some reason.")
 
 def random_csrf():
     myrg = random.SystemRandom()

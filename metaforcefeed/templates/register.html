@@ -3,14 +3,17 @@
 <div class="grid grid-pad" id="content">
     <div class="col-12-12">
         <div class="content">
-            <form id="registration_form" method="post">
+            {% if error %}
+            <p class="error">{{error}}</p>
+            {% endif %}
+            <form id="registration_form" action="{{ url_for('metaforcefeed.register') }}" method="POST">
                 <input name="_csrf_token" type="hidden" value="{{ csrf_token() }}" />
                 <label for="username">Username: </label>
-                <input id="username" type="username" />
+                <input id="username" name="username" type="text" />
                 <label for="password1">Password: </label>
-                <input id="password1" type="password" />
+                <input id="password1" name="password1" type="password" />
                 <label for="password2">Password again: </label>
-                <input id="password2" type="password" />
+                <input id="password2" name="password2" type="password" />
                 <input type="submit" value="Sign the hell up" />
             </form>
         </div>
