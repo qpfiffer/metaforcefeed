@@ -44,7 +44,7 @@ def submit_idea(connection, short_summary, long_summary):
     }
 
     key = _get_summary_str(slug)
-    connection.set(slug, summary)
+    connection.set(key, summary)
 
     # TODO: Refactor this when we have compare-and-set
     all_items = connection.get(ALL_ITEMS_LIST)

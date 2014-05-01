@@ -31,11 +31,13 @@
                 <div class="content">
                     <ul>
                         {% for item in items %}
+                            {% if item %}
                             <li>
                                 <div class="item">
                                     {{ item }}
                                 </div>
                             </li>
+                            {% endif %}
                         {% endfor %}
                     </ul>
                 </div>
