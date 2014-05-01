@@ -3,6 +3,7 @@ from flask import Flask, g, request, session
 from olegsessions import OlegDBSessionInterface
 
 from metaforcefeed.routes import app as routes
+import sys, getopt
 
 app = Flask('metaforcefeed')
 app.register_blueprint(routes)
@@ -14,7 +15,7 @@ def main(argv):
     port = 5000
 
     try:
-        opts, args = getopt.getopt(argv,"hi:o:",["debug", "port="])
+        opts, args = getopt.getopt(argv,"dp",["debug", "port="])
     except getopt.GetoptError:
         print "Specifiy some options"
         sys.exit(2)
@@ -28,3 +29,6 @@ def main(argv):
         app.config['CACHE'] = False
 
     app.run(debug=debug, port=port)
+
+if __name__ == '__main__':
+    main(sys.argv[1:])
