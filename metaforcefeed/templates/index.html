@@ -34,7 +34,9 @@
                             {% if item %}
                             <li>
                                 <div class="item">
-                                    {{ item }}
+                                    <h3>{{item.short_summary}}</h3>
+                                    <p>{{item.long_summary}}</p>
+                                    <p>Submitted by: {{item.created_by}}</p>
                                 </div>
                             </li>
                             {% endif %}
