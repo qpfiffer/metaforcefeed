@@ -1,0 +1,20 @@
+{% extends "index.html" %}
+{% block content %}
+<div class="grid grid-pad" id="content">
+    <div class="col-12-12">
+        <div class="content">
+            <form id="submission_form" method="post">
+                <input name="_csrf_token" type="hidden" value="{{ csrf_token() }}" />
+
+                <label for="short_summary">Short Summary: </label>
+                <input id="short_summary" type="text" />
+
+                <label for="longer_summary">Longer Summary: </label>
+                <textarea id="longer_summary"></textarea>
+
+                <input type="submit" value="Submit" />
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
