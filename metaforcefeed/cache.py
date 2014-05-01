@@ -7,11 +7,11 @@ def ol_view_cache(f):
     def decorated_function(*args, **kwargs):
         start_cache_time = time.time()
         # Debug
-        #if not current_app.config['CACHE']:
-        #    return f(*args, **kwargs)
+        if not current_app.config['CACHE']:
+            return f(*args, **kwargs)
 
         res = None
-        fancy = u"{}{}{}{}{}".format(db_meta_info()['count'],
+        fancy = u"{}{}{}{}{}".format(0,
                 request.host,
                 request.query_string,
                 unicode(request.path).replace("/", "_"),
