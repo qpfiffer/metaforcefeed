@@ -11,8 +11,14 @@
 #registration_form input {
     display: block;
 }
-#submission_form input, #submission_form textarea {
+#submission_form input[type=text], #submission_form textarea {
     display: block;
+    width: 100%;
+    padding: 5px;
+}
+#submission_form textarea {
+    min-height: 10em;
+    min-width: 100%;
 }
 .error {
     color: red;
