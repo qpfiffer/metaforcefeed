@@ -31,9 +31,17 @@ def submit():
 
 @app.route("/login", methods=['GET', 'POST'])
 def login():
+    error = None
     if request.method == 'POST':
-        return redirect(url_for('metaforcefeed.root'))
-    return render_template("login.html")
+        username = request.form['username']
+        password = request.form['password']
+
+        if auth_user(g.db, username, password):
+            session.permanent = True
+            session['username'] = username
+            return redirect(url_for('metaforcefeed.root'))
+        error = "Could not log in for some reason."
+    return render_template("login.html", error=error)
 
 @app.route("/register", methods=['GET', 'POST'])
 def register():
@@ -64,3 +72,8 @@ def register():
         error = user_obj
 
     return render_template("register.html", error=error)
+
+@app.route("/logout", methods=['GET'])
+def logout():
+    session.clear()
+    return redirect(url_for('metaforcefeed.root'))

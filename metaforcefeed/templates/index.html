@@ -15,14 +15,17 @@
             <div class="col-4-12">
                 <div class="content">
                     <ul>
+                        {% if user %}
                         <li><a href="{{ url_for('metaforcefeed.submit') }}">Submit New</a></li>
+                        <li><a href="{{ url_for('metaforcefeed.logout') }}">Logout</a></li>
+                        {% else %}
                         <li><a href="{{ url_for('metaforcefeed.login') }}">Login</a></li>
+                        {% endif %}
                     </ul>
                 </div>
             </div>
         </div>
         {% block content %}
-        <p>{{user}}</p>
         <div class="grid grid-pad" id="content">
             <div class="col-12-12">
                 <div class="content">

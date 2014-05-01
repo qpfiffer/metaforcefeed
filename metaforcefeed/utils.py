@@ -1,4 +1,5 @@
 from bcrypt import hashpw, gensalt
+import random, string
 
 USERS_PREFIX = "users"
 def _get_user_str(username):
