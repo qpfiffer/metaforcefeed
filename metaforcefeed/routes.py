@@ -11,8 +11,9 @@ app = Blueprint('metaforcefeed', __name__, template_folder='templates')
 @app.route("/", methods=['GET'])
 @ol_view_cache
 def root():
+    from metaforcefeed.utils import ALL_ITEMS_LIST
     #TODO: Refactor this when prefix matching is done.
-    all_items = g.db.get("all_items") or []
+    all_items = g.db.get(ALL_ITEMS_LIST) or []
 
     for item_key in all_items:
         pass
@@ -21,13 +22,21 @@ def root():
 
 @app.route("/submit", methods=['GET', 'POST'])
 def submit():
+    error = None
     if not session.get('username', None):
         return redirect(url_for('metaforcefeed.login'))
 
     if request.method == 'POST':
-        return redirect(url_for('metaforcefeed.root'))
+        from metaforcefeed.utils import submit_idea
+        shorts = request.form.get("short_summary")
+        longs = request.form.get("longer_summary")
+        created, summary = submit_idea(g.db, shorts, longs)
 
-    return render_template("submit.html")
+        if created:
+            return redirect(url_for('metaforcefeed.root'))
+        error = summary
+
+    return render_template("submit.html", error=error)
 
 @app.route("/login", methods=['GET', 'POST'])
 def login():

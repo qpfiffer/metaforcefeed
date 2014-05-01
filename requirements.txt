@@ -1,7 +1,9 @@
 Flask==0.10.1
 Jinja2==2.7.2
 MarkupSafe==0.21
+Unidecode==0.04.14
 Werkzeug==0.9.4
+argparse==1.2.1
 bcrypt==1.0.2
 cffi==0.8.2
 ipdb==0.8
@@ -11,5 +13,6 @@ msgpack-python==0.4.2
 oleg-flask-sessions==0.2.3
 olegdb-python==0.1.2
 pycparser==2.10
+python-slugify==0.0.7
 requests==2.2.1
 wsgiref==0.1.2
