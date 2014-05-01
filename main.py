@@ -1,6 +1,7 @@
 #!/usr/bin/env python2
 from flask import Flask, g, request, session
 from olegsessions import OlegDBSessionInterface
+from olegdb import OlegDB
 
 from metaforcefeed.routes import app as routes
 import sys, getopt
@@ -9,6 +10,10 @@ app = Flask('metaforcefeed')
 app.register_blueprint(routes)
 app.config['CACHE'] = True
 app.session_interface = OlegDBSessionInterface()
+
+@app.before_request
+def setup_db():
+    g.db = OlegDB()
 
 def main(argv):
     debug = False

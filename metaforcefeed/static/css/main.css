@@ -1,3 +1,7 @@
 #nav {
     border-bottom: solid 1px #000;
 }
+#main_header {
+    display: inline;
+    margin-right: 2em;
+}
