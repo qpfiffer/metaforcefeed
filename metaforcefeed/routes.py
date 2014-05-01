@@ -1,4 +1,5 @@
-from flask import g, request, current_app, Blueprint, render_template, redirect
+from flask import g, request, current_app, Blueprint, render_template,\
+        redirect, url_for
 
 from metaforcefeed.cache import ol_view_cache
 
@@ -26,4 +27,4 @@ def submit():
 def login():
     if request.method == 'POST':
         return redirect(url_for('metaforcefeed.root'))
-    return render_template("index.html")
+    return render_template("login.html")

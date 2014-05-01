@@ -5,3 +5,6 @@
     display: inline;
     margin-right: 2em;
 }
+#login_form input {
+    display: block;
+}
