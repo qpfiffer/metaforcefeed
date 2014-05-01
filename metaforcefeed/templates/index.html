@@ -1,3 +1,32 @@
-<DOCTYPE html>
+<!DOCTYPE html>
 <html>
+    <head>
+        <title>#metaforcefeed</title>
+        <link type="text/css" rel="stylesheet" href="{{ url_for('static', filename='css/simplegrid.css') }}" />
+        <link type="text/css" rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}" />
+    </head>
+    <body>
+        <div id="nav" class="grid grid-pad" id="content">
+            <div class="col-4-12">
+                <div class="content">
+                    <h1>#metaforcefeed</h1>
+                </div>
+            </div>
+        </div>
+        <div class="grid grid-pad" id="content">
+            <div class="col-12-12">
+                <div class="content">
+                    <ul>
+                        {% for item in items %}
+                            <li>
+                                <div class="item">
+                                    {{ item.name }}
+                                </div>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </body>
 </html>

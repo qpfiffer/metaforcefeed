@@ -10,8 +10,14 @@ def ol_view_cache(f):
         if not current_app.config['CACHE']:
             return f(*args, **kwargs)
 
+        resp = requests.get("http://localhost:8080/last_updated", stream=True)
+        if resp.status_code != 404:
+            last_num = int(resp.raw.read())
+        else:
+            last_num = 0
+
         res = None
-        fancy = u"{}{}{}{}{}".format(0,
+        fancy = u"{}{}{}{}{}".format(last_num,
                 request.host,
                 request.query_string,
                 unicode(request.path).replace("/", "_"),
@@ -23,7 +29,7 @@ def ol_view_cache(f):
         if resp.status_code == 404:
             res = f(*args, **kwargs)
             # 24 hours
-            expiration = int(calendar.timegm(time.gmtime())) + 60 #(60 * 60 * 24)
+            expiration = int(calendar.timegm(time.gmtime())) + (60 * 60 * 24)
             utf_data = res.encode('utf-8')
             requests.post("http://localhost:8080/{}".format(quoted),
                 data=utf_data,

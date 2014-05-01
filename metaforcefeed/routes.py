@@ -8,4 +8,5 @@ app = Blueprint('metaforcefeed', __name__, template_folder='templates')
 @app.route("/", methods=['GET'])
 @ol_view_cache
 def root():
+    items = []
     return render_template("index.html")
