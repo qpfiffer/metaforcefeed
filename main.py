@@ -4,20 +4,13 @@ from olegsessions import OlegDBSessionInterface
 from olegdb import OlegDB
 
 from metaforcefeed.routes import app as routes
+from metaforcefeed.utils import random_csrf, auth_user
 import sys, getopt, random, string
 
 app = Flask('metaforcefeed')
 app.register_blueprint(routes)
 app.config['CACHE'] = True
 app.session_interface = OlegDBSessionInterface()
-
-def random_csrf():
-    myrg = random.SystemRandom()
-    length = 32
-    # If you want non-English characters, remove the [0:52]
-    alphabet = string.letters[0:52] + string.digits
-    pw = str().join(myrg.choice(alphabet) for _ in range(length))
-    return pw
 
 @app.before_request
 def setup_db():

@@ -32,3 +32,9 @@ def login():
     if request.method == 'POST':
         return redirect(url_for('metaforcefeed.root'))
     return render_template("login.html")
+
+@app.route("/register", methods=['GET', 'POST'])
+def register():
+    if request.method == 'POST':
+        return redirect(url_for('metaforcefeed.root'))
+    return render_template("register.html")

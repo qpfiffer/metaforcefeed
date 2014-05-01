@@ -8,6 +8,9 @@
 #login_form input {
     display: block;
 }
+#registration_form input {
+    display: block;
+}
 #submission_form input, #submission_form textarea {
     display: block;
 }

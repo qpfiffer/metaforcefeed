@@ -2,8 +2,12 @@ Flask==0.10.1
 Jinja2==2.7.2
 MarkupSafe==0.21
 Werkzeug==0.9.4
+bcrypt==1.0.2
+cffi==0.8.2
 itsdangerous==0.24
 msgpack-python==0.4.2
 oleg-flask-sessions==0.2.3
 olegdb-python==0.1.2
+pycparser==2.10
 requests==2.2.1
+wsgiref==0.1.2
