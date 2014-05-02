@@ -9,7 +9,8 @@
         <div id="nav" class="grid grid-pad" id="content">
             <div class="col-8-12">
                 <div class="content">
-                    <span><h1 id="main_header">#metaforcefeed</h1> "Bash disinformation campaign."</span>
+                    <span>
+                        <h1 id="main_header"><a href="{{ url_for('metaforcefeed.root') }}">#metaforcefeed</a></h1> "Bash disinformation campaign."</span>
                 </div>
             </div>
             <div class="col-4-12">
@@ -34,7 +35,9 @@
                             {% if item %}
                             <li>
                                 <div class="item">
-                                    <h3>{{item.short_summary}}</h3>
+                                    <h3><a href="{{ url_for('metaforcefeed.item', slug=item.slug) }}">
+                                            {{item.short_summary}}
+                                    </a></h3>
                                     <p>{{item.long_summary}}</p>
                                     <p>Submitted by: {{item.created_by}}</p>
                                 </div>

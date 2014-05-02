@@ -1,9 +1,9 @@
 from flask import g, request, current_app, Blueprint, render_template,\
-        redirect, url_for, session
+        redirect, url_for, session, abort
 from werkzeug.exceptions import BadRequestKeyError
 
 from metaforcefeed.cache import ol_view_cache
-from metaforcefeed.utils import sign_up, auth_user
+from metaforcefeed.utils import sign_up, auth_user, _get_summary_str
 
 
 app = Blueprint('metaforcefeed', __name__, template_folder='templates')
@@ -20,6 +20,17 @@ def root():
         passed_items.append(g.db.get(item_key))
 
     return render_template("index.html", items=passed_items)
+
+@app.route("/item/<slug>", methods=['GET'])
+@ol_view_cache
+def item(slug):
+    if not slug:
+        return abort(404)
+
+    item = None
+    item = g.db.get(_get_summary_str(slug))
+
+    return render_template("index.html", item=item)
 
 @app.route("/submit", methods=['GET', 'POST'])
 def submit():
