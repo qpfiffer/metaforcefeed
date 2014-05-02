@@ -1,5 +1,6 @@
 #!/usr/bin/env python2
 from flask import abort, Flask, g, request, session
+from flaskext.markdown import Markdown
 from functools import wraps
 from olegsessions import OlegDBSessionInterface
 from olegdb import OlegDB
@@ -14,6 +15,7 @@ app.register_blueprint(routes)
 app.register_blueprint(conprocs)
 app.config['CACHE'] = True
 app.session_interface = OlegDBSessionInterface()
+Markdown(app)
 
 def profile_wrapper(to_profile):
     all_funcs = {x:getattr(to_profile, x) for x in dir(to_profile)
