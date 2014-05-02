@@ -20,7 +20,7 @@ def root():
         passed_items.append(g.db.get(item_key))
 
     passed_items = sorted([x for x in passed_items if x],
-        key=lambda x: x['pings'])
+        key=lambda x: x['pings'], reverse=False)
 
     return render_template("index.html", items=passed_items)
 
