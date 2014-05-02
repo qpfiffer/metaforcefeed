@@ -3,7 +3,6 @@ Jinja2==2.7.2
 MarkupSafe==0.21
 Unidecode==0.04.14
 Werkzeug==0.9.4
-argparse==1.2.1
 bcrypt==1.0.2
 cffi==0.8.2
 ipdb==0.8
