@@ -2,14 +2,13 @@ from flask import g, request, current_app, Blueprint, render_template,\
         redirect, url_for, session, abort, Response
 from werkzeug.exceptions import BadRequestKeyError
 
-from metaforcefeed.cache import ol_view_cache
+#from metaforcefeed.cache import ol_view_cache
 from metaforcefeed.utils import ping_summary, sign_up, auth_user, _get_summary_str
 import json, time, calendar
 
 app = Blueprint('metaforcefeed', __name__, template_folder='templates')
 
 @app.route("/", methods=['GET'])
-@ol_view_cache
 def root():
     from metaforcefeed.utils import ALL_ITEMS_LIST
     #TODO: Refactor this when prefix matching is done.
@@ -69,7 +68,6 @@ def ping(slug):
     return Response(json.dumps(to_return), mimetype="application/json")
 
 @app.route("/item/<slug>", methods=['GET'])
-@ol_view_cache
 def item(slug):
     if not slug:
         return abort(404)
