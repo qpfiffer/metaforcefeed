@@ -30,7 +30,7 @@ def item(slug):
     item = None
     item = g.db.get(_get_summary_str(slug))
 
-    return render_template("index.html", item=item)
+    return render_template("item.html", item=item)
 
 @app.route("/submit", methods=['GET', 'POST'])
 def submit():

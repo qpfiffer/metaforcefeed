@@ -30,16 +30,15 @@
         <div class="grid grid-pad" id="content">
             <div class="col-12-12">
                 <div class="content">
-                    <ul>
+                    <ul id="item_list">
                         {% for item in items %}
                             {% if item %}
                             <li>
                                 <div class="item">
+                                    <div class="arrow_up"></div>
                                     <h3><a href="{{ url_for('metaforcefeed.item', slug=item.slug) }}">
                                             {{item.short_summary}}
                                     </a></h3>
-                                    <p>{{item.long_summary}}</p>
-                                    <p>Submitted by: {{item.created_by}}</p>
                                 </div>
                             </li>
                             {% endif %}
