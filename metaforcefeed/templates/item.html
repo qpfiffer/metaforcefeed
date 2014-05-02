@@ -6,7 +6,7 @@
             <div class="item">
                 <h3>{{item.short_summary}}</h3>
                 <p class="submitted_by">Submitted by {{item.created_by}}</p>
-                <p>{{item.long_summary}}</p>
+                <p>{{item.long_summary|markdown}}</p>
                 {% if user.username == item.created_by %}
                 <p>
                     <form action="{{ url_for('metaforcefeed.delete', slug=item.slug) }}" method="POST">
