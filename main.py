@@ -6,7 +6,7 @@ from olegdb import OlegDB
 from metaforcefeed.routes import app as routes
 from metaforcefeed.utils import random_csrf, auth_user
 from metaforcefeed.conprocs import app as conprocs
-import sys, getopt, random, string
+import sys, getopt, random, string, json
 
 app = Flask('metaforcefeed')
 app.register_blueprint(routes)
@@ -18,7 +18,14 @@ app.session_interface = OlegDBSessionInterface()
 def setup_db():
     if request.method == "POST":
         token = session.get('_csrf_token', None)
-        if not token or token != request.form.get('_csrf_token'):
+        in_form = token == request.form.get('_csrf_token')
+        try:
+            stuff = json.loads(request.data).get("_csrf_token")
+            in_data = stuff == token
+        except Exception as e:
+            print e
+            in_data = False
+        if not token or not (in_form or in_data):
             abort(403)
     g.db = OlegDB()
 

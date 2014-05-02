@@ -35,10 +35,11 @@
                             {% if item %}
                             <li>
                                 <div class="item">
-                                    <div data-slug="{{item.slug}}" class="arrow_up"></div>
+                                    <div data-slug="{{item.slug}}" class="arrow_up"></div><span>{{item.pings}}</span>
                                     <h3><a href="{{ url_for('metaforcefeed.item', slug=item.slug) }}">
                                             {{item.short_summary}}
                                     </a></h3>
+                                    <span class="error"></span>
                                 </div>
                             </li>
                             {% endif %}
@@ -50,6 +51,8 @@
         {% endblock %}
         <script src="{{ url_for('static', filename='js/ping.js') }}"></script>
         <script>
+            ping_url = "{{url_for('metaforcefeed.ping', slug='0')}}";
+            csrf_token = "{{ session['_csrf_token'] }}";
             ping_init();
         </script>
     </body>
