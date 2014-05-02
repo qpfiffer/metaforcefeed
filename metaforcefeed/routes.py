@@ -3,8 +3,8 @@ from flask import g, request, current_app, Blueprint, render_template,\
 from werkzeug.exceptions import BadRequestKeyError
 
 from metaforcefeed.cache import ol_view_cache
-from metaforcefeed.utils import sign_up, auth_user, _get_summary_str
-
+from metaforcefeed.utils import ping_summary, sign_up, auth_user, _get_summary_str
+import json
 
 app = Blueprint('metaforcefeed', __name__, template_folder='templates')
 
@@ -19,7 +19,54 @@ def root():
     for item_key in all_items:
         passed_items.append(g.db.get(item_key))
 
+    passed_items = sorted([x for x in passed_items if x],
+        key=lambda x: x['pings'])
+
     return render_template("index.html", items=passed_items)
+
+@app.route("/ping/<slug>", methods=['POST'])
+def ping(slug):
+    to_return = { 'success': True, 'error': "" }
+    if not slug:
+        return abort(404)
+
+    gmtime = time.gmtime()
+    seconds = int(calendar.timegm(gmtime))
+    expiration = seconds + (60 * 60 * 24) #24 hours later
+
+    ping_obj = {
+        'pinged': slug,
+        'when': seconds
+    }
+    pings = session['pings']
+    if not pings:
+        session['pings'] = { slug: ping_obj }
+        ping_summary(g.db, slug, expiration)
+        return Response(dumps(to_return), mimetype="application/json")
+    else:
+        last_ping = pings.get(slug, None)
+        if not last_ping:
+            created, obj = ping_summary(g.db, slug, expiration)
+            if created:
+                session['pings'][slug] = ping_obj
+                return Response(dumps(to_return), mimetype="application/json")
+            else:
+                to_return['error'] = obj
+                return Response(dumps(to_return), mimetype="application/json")
+
+        if ping['when'] > expiration:
+            created, obj = ping_summary(g.db, slug, expiration)
+            if created:
+                session['pings'][slug] = ping_obj
+                return Response(dumps(to_return), mimetype="application/json")
+            else:
+                to_return['error'] = obj
+                return Response(dumps(to_return), mimetype="application/json")
+
+        to_return['success'] = False
+        to_return['error'] = "You need to wait 24 hours to ping again."
+
+    return Response(dumps(to_return), mimetype="application/json")
 
 @app.route("/item/<slug>", methods=['GET'])
 @ol_view_cache

@@ -35,7 +35,7 @@
                             {% if item %}
                             <li>
                                 <div class="item">
-                                    <div class="arrow_up"></div>
+                                    <div data-slug="{{item.slug}}" class="arrow_up"></div>
                                     <h3><a href="{{ url_for('metaforcefeed.item', slug=item.slug) }}">
                                             {{item.short_summary}}
                                     </a></h3>
@@ -48,5 +48,9 @@
             </div>
         </div>
         {% endblock %}
+        <script src="{{ url_for('static', filename='js/ping.js') }}"></script>
+        <script>
+            ping_init();
+        </script>
     </body>
 </html>

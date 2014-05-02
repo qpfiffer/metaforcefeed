@@ -19,6 +19,17 @@ def _get_summary_str(slug):
 def _hash_pw(username, pw, salt):
     return hashpw("{}{}".format(username, pw), salt)
 
+def ping_summary(connection, slug, expiration):
+    key = _get_summary_str(slug)
+    summary = connection.get(key)
+
+    if not summary:
+        return (False, "Summary with that key does not exist.")
+
+    summary['pings'] = summary['pings'] + 1
+    connection.set(key, summary)
+
+    return (True, summary)
 def submit_idea(connection, short_summary, long_summary):
     error = ""
     if not short_summary or len(short_summary) == 0:
