@@ -95,6 +95,20 @@ def submit():
 
     return render_template("submit.html", error=error)
 
+@app.route("/item/<slug>/delete", methods=['POST'])
+def delete(slug):
+    if not slug:
+        return abort(404)
+
+    item = None
+    item = g.db.delete(_get_summary_str(slug))
+
+    # NOW WE HAVE TO GO DELETE THEM FROM THE LIST
+    all_items = g.db.get(ALL_ITEMS_LIST)
+    all_items = filter(lambda x: x != _get_summary_str(slug), all_items)
+    g.db.set(ALL_ITEMS_LIST, all_items)
+    return redirect(url_for('metaforcefeed.root'))
+
 @app.route("/login", methods=['GET', 'POST'])
 def login():
     error = None
