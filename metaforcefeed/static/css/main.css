@@ -42,3 +42,8 @@
     border-bottom: 10px solid black;
     cursor: pointer;
 }
+.new_comment textarea {
+    min-width: 512px;
+    min-height: 150px;
+    display: block;
+}

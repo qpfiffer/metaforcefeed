@@ -31,6 +31,23 @@ def ping_summary(connection, slug, expiration):
     connection.set(key, summary)
 
     return (True, summary)
+
+def post_comment(connection, slug, comment, user):
+    key = _get_summary_str(slug)
+    summary = connection.get(key)
+
+    if not summary:
+        return (False, "Summary with that key does not exist.")
+
+    comment_obj = {
+        'text': comment,
+        'username': user
+    }
+    summary['comments'].append(comment_obj)
+    connection.set(key, summary)
+
+    return (True, comment)
+
 def submit_idea(connection, short_summary, long_summary):
     error = ""
     if not short_summary or len(short_summary) == 0:

@@ -7,6 +7,22 @@
                 <h3>{{item.short_summary}}</h3>
                 <p class="submitted_by">Submitted by {{item.created_by}}</p>
                 <p>{{item.long_summary|markdown}}</p>
+                {% if extra %}
+                <p>{{extra}}</p>
+                {% endif %}
+                <form class="new_comment" method="POST">
+                    <input name="_csrf_token" type="hidden" value="{{ csrf_token() }}" />
+                    <input type="submit" value="Submit" />
+                    <textarea name="comment" placeholder="SPEAK, MORTAL."></textarea>
+                </form>
+                <ul class="comments">
+                    {% for comment in item.comments %}
+                    <li>
+                        <p>{{comment.text}}</p>
+                        <p class="submitted_by">{{comment.username}}</p>
+                    </li>
+                    {% endfor %}
+                </ul>
             </div>
         </div>
     </div>

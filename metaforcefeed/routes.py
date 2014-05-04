@@ -65,15 +65,26 @@ def ping(slug):
 
     return Response(json.dumps(to_return), mimetype="application/json")
 
-@app.route("/item/<slug>", methods=['GET'])
+@app.route("/item/<slug>", methods=['GET', 'POST'])
 def item(slug):
+    extra = None
     if not slug:
         return abort(404)
+
+    if request.method == 'POST':
+        if not session.get('username', None):
+            return redirect(url_for('metaforcefeed.login'))
+        from metaforcefeed.utils import post_comment
+        username = session['username']
+        created, err = post_comment(g.db, slug, request.form['comment'], username)
+        if not created:
+            extra = err
+
 
     item = None
     item = g.db.get(_get_summary_str(slug))
 
-    return render_template("item.html", item=item)
+    return render_template("item.html", item=item, extra=extra)
 
 @app.route("/submit", methods=['GET', 'POST'])
 def submit():
