@@ -12,11 +12,12 @@ function ping_object(e) {
             var error_ele = dom_ele.parentElement.getElementsByClassName("error")[0];
             if (resp_json.success) {
                 var pings_ele = dom_ele.parentElement.getElementsByClassName("pings")[0];
-                pings_ele.innerText = resp_json.ping_obj.pings;
-                error_ele.innerText = "";
+                var pings_ele = dom_ele.parentElement.getElementsByClassName("pings")[0];
+                pings_ele.textContent = resp_json.ping_obj.pings;
+                error_ele.textContent = "";
                 dom_ele.onclick = function() { return true; };
             } else {
-                error_ele.innerText = resp_json.error;
+                error_ele.textContent = resp_json.error;
             }
         }
     }
