@@ -73,6 +73,11 @@ def submit_idea(connection, short_summary, long_summary):
     }
 
     key = _get_summary_str(slug)
+    exists = connection.has_key(key)
+
+    if exists:
+        return (False, "A post with that idea already exists.")
+
     connection.set(key, summary)
 
     # TODO: Refactor this when we have compare-and-set
