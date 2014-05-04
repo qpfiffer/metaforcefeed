@@ -39,10 +39,11 @@ def ping(slug):
     }
     pings = session.get('pings', None)
     def _handle_creation():
+        # Inline because fuck a scope
         created, obj = ping_summary(g.db, slug, expiration)
         if created:
             session['pings'][slug] = ping_obj
-            to_return['ping_obj'] = ping_obj
+            to_return['ping_obj'] = obj
             return Response(json.dumps(to_return), mimetype="application/json")
         else:
             to_return['error'] = obj

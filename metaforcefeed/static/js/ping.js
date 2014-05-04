@@ -11,8 +11,9 @@ function ping_object(e) {
             var resp_json = JSON.parse(httpRequest.responseText);
             var error_ele = dom_ele.parentElement.getElementsByClassName("error")[0];
             if (resp_json.success) {
+                var pings_ele = dom_ele.parentElement.getElementsByClassName("pings")[0];
+                pings_ele.innerText = resp_json.ping_obj.pings;
                 error_ele.innerText = "";
-                var pings_ele = dom_ele.parentElement.getElementsByClassName("pings");
                 dom_ele.onclick = function() { return true; };
             } else {
                 error_ele.innerText = resp_json.error;
