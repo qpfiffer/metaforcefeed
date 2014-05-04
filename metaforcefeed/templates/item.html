@@ -10,6 +10,14 @@
                 {% if extra %}
                 <p>{{extra}}</p>
                 {% endif %}
+                {% if user.username == item.created_by %}
+                <p>
+                    <form action="{{ url_for('metaforcefeed.delete', slug=item.slug) }}" method="POST">
+                        <input name="_csrf_token" type="hidden" value="{{ csrf_token() }}" >
+                        <button type="submit">I don't care anymore.</button>
+                    </form>
+                </p>
+                {% endif %}
                 <form class="new_comment" method="POST">
                     <input name="_csrf_token" type="hidden" value="{{ csrf_token() }}" />
                     <input type="submit" value="Submit" />

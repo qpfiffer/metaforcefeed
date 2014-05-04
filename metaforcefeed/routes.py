@@ -1,9 +1,10 @@
-from flask import g, request, current_app, Blueprint, render_template,\
-        redirect, url_for, session, abort, Response
+from flask import (g, request, current_app, Blueprint, render_template,
+                   redirect, url_for, session, abort, Response)
 from werkzeug.exceptions import BadRequestKeyError
 
 #from metaforcefeed.cache import ol_view_cache
-from metaforcefeed.utils import ping_summary, sign_up, auth_user, _get_summary_str
+from metaforcefeed.utils import (ping_summary, sign_up, auth_user,
+                                 _get_summary_str, ALL_ITEMS_LIST)
 import json, time, calendar
 
 app = Blueprint('metaforcefeed', __name__, template_folder='templates')
@@ -103,6 +104,20 @@ def submit():
         error = summary
 
     return render_template("submit.html", error=error)
+
+@app.route("/item/<slug>/delete", methods=['POST'])
+def delete(slug):
+    if not slug:
+        return abort(404)
+
+    item = None
+    item = g.db.delete(_get_summary_str(slug))
+
+    # NOW WE HAVE TO GO DELETE THEM FROM THE LIST
+    all_items = g.db.get(ALL_ITEMS_LIST)
+    all_items = filter(lambda x: x != _get_summary_str(slug), all_items)
+    g.db.set(ALL_ITEMS_LIST, all_items)
+    return redirect(url_for('metaforcefeed.root'))
 
 @app.route("/login", methods=['GET', 'POST'])
 def login():
