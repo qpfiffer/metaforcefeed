@@ -12,6 +12,7 @@ function ping_object(e) {
             var error_ele = dom_ele.parentElement.getElementsByClassName("error")[0];
             if (resp_json.success) {
                 error_ele.innerText = "";
+                var pings_ele = dom_ele.parentElement.getElementsByClassName("pings");
                 dom_ele.onclick = function() { return true; };
             } else {
                 error_ele.innerText = resp_json.error;

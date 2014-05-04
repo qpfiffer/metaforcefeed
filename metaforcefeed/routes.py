@@ -38,29 +38,26 @@ def ping(slug):
         'when': seconds
     }
     pings = session.get('pings', None)
+    def _handle_creation():
+        created, obj = ping_summary(g.db, slug, expiration)
+        if created:
+            session['pings'][slug] = ping_obj
+            to_return['ping_obj'] = ping_obj
+            return Response(json.dumps(to_return), mimetype="application/json")
+        else:
+            to_return['error'] = obj
+            return Response(json.dumps(to_return), mimetype="application/json")
+
     if not pings:
         session['pings'] = { slug: ping_obj }
-        ping_summary(g.db, slug, expiration)
-        return Response(json.dumps(to_return), mimetype="application/json")
+        return _handle_creation()
     else:
         last_ping = pings.get(slug, None)
         if not last_ping:
-            created, obj = ping_summary(g.db, slug, expiration)
-            if created:
-                session['pings'][slug] = ping_obj
-                return Response(json.dumps(to_return), mimetype="application/json")
-            else:
-                to_return['error'] = obj
-                return Response(json.dumps(to_return), mimetype="application/json")
+            return _handle_creation()
 
-        if last_ping['when'] > expiration:
-            created, obj = ping_summary(g.db, slug, expiration)
-            if created:
-                session['pings'][slug] = ping_obj
-                return Response(json.dumps(to_return), mimetype="application/json")
-            else:
-                to_return['error'] = obj
-                return Response(json.dumps(to_return), mimetype="application/json")
+        if seconds < last_ping['when']:
+            return _handle_creation()
 
         to_return['success'] = False
         to_return['error'] = "You need to wait 24 hours to ping again."

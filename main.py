@@ -22,6 +22,8 @@ def profile_wrapper(to_profile):
             if str(type(getattr(to_profile, x))) == "<type 'instancemethod'>"\
             and not x.startswith("__")}
 
+    calls_dict = {}
+
     def delta_wrapper(to_profile, old_function):
         @wraps(old_function)
         def new(*args, **kwargs):
@@ -35,10 +37,12 @@ def profile_wrapper(to_profile):
             name = str(old_function)
             print "{} {}".format(name, call_obj["ms"])
 
-            #if to_profile._all_calls.get(name):
-            #    to_profile._all_calls[name] = [call_obj]
-            #else:
-            #    to_profile._all_calls[name].append(call_obj)
+            if calls_dict.get(name):
+                calls_dict[name].append(call_obj)
+            else:
+                calls_dict[name] = [call_obj]
+
+            print "Times called: {}".format(len(calls_dict[name]))
 
             return ret
         return new
@@ -49,9 +53,7 @@ def profile_wrapper(to_profile):
 
 @profile_wrapper
 class ProlegDB(OlegDB):
-    def __init__(self, *args, **kwargs):
-        self._all_calls = {}
-        return super(ProlegDB, self).__init__(*args, **kwargs)
+    pass
 
 @app.before_request
 def setup_db():
