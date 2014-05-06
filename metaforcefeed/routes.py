@@ -58,7 +58,7 @@ def ping(slug):
         if not last_ping:
             return _handle_creation()
 
-        if seconds > last_ping['when']:
+        if seconds > (last_ping['when'] + (60 * 60 * 24)):
             return _handle_creation()
 
         to_return['success'] = False
