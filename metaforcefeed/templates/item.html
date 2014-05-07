@@ -4,13 +4,13 @@
     <div class="col-12-12">
         <div class="content">
             <div class="item">
-                <h3>{{item.short_summary}}</h3>
+                <h3>{{item.short_summary}}</h3><span class="pings">{{item.pings}} Pings</span>
                 <p class="submitted_by">Submitted by {{item.created_by}}</p>
                 <p>{{item.long_summary|markdown}}</p>
                 {% if extra %}
                 <p>{{extra}}</p>
                 {% endif %}
-                {% if user.username == item.created_by %}
+                {% if user.username == item.created_by or user.admin %}
                 <p>
                     <form action="{{ url_for('metaforcefeed.delete', slug=item.slug) }}" method="POST">
                         <input name="_csrf_token" type="hidden" value="{{ csrf_token() }}" >
@@ -26,7 +26,7 @@
                 <ul class="comments">
                     {% for comment in item.comments %}
                     <li>
-                        <p>{{comment.text}}</p>
+                        <p>{{comment.text|markdown}}</p>
                         <p class="submitted_by">{{comment.username}}</p>
                     </li>
                     {% endfor %}
