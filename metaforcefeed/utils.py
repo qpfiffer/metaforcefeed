@@ -12,6 +12,8 @@ SUMMARY_PREFIX = "summary"
 ACTIVITY_PREFIX = "action"
 SCHEMA_VERSION = "0001"
 
+SLUG_SIZE=45
+
 def _get_user_str(username):
     return "{}{}".format(USERS_PREFIX, username)
 
@@ -73,7 +75,7 @@ def submit_idea(connection, short_summary, long_summary):
     if not user:
         return (False, "User not logged in.")
 
-    slug = slugify(short_summary)
+    slug = slugify(short_summary)[:SLUG_SIZE]
     summary = {
         "slug": slug,
         "api_version": SCHEMA_VERSION,
