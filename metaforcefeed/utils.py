@@ -9,6 +9,7 @@ import random, string, time
 ALL_ITEMS_LIST = "all_items"
 USERS_PREFIX = "users"
 SUMMARY_PREFIX = "summary"
+ACTIVITY_PREFIX = "action"
 SCHEMA_VERSION = "0001"
 
 def _get_user_str(username):
@@ -19,6 +20,17 @@ def _get_summary_str(slug):
 
 def _hash_pw(username, pw, salt):
     return hashpw("{}{}".format(username, pw), salt)
+
+def enable_admin(connection, user):
+    user_str = _get_user_str(user)
+    user = connection.get(user_str)
+    try:
+        user['admin'] = True
+        connection.set(user_str, user)
+    except:
+        return False
+
+    return True
 
 def ping_summary(connection, slug, expiration):
     key = _get_summary_str(slug)

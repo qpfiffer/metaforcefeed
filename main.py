@@ -6,7 +6,7 @@ from olegsessions import OlegDBSessionInterface
 from olegdb import OlegDB
 
 from metaforcefeed.routes import app as routes
-from metaforcefeed.utils import random_csrf, auth_user
+from metaforcefeed.utils import random_csrf, auth_user, enable_admin
 from metaforcefeed.conprocs import app as conprocs
 import sys, getopt, random, string, json, time
 
@@ -82,7 +82,7 @@ def main(argv):
     port = 5000
 
     try:
-        opts, args = getopt.getopt(argv,"dp",["debug", "port="])
+        opts, args = getopt.getopt(argv,"dpa",["debug", "port=", "admin-enable="])
     except getopt.GetoptError:
         print "Specifiy some options"
         sys.exit(2)
@@ -91,6 +91,8 @@ def main(argv):
             debug = True
         elif opt in ("--port"):
             port = int(arg)
+        elif opt in ("--admin-enable"):
+            enable_admin(OlegDB(), arg)
 
     if debug:
         app.config['CACHE'] = False
