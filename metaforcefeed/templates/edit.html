@@ -1,0 +1,23 @@
+{% extends "index.html" %}
+{% block content %}
+<div class="grid grid-pad" id="content">
+    <div class="col-6-12">
+        <div class="content">
+            {% if error %}
+            <p class="error">{{error}}</p>
+            {% endif %}
+            <form id="submission_form" method="post">
+                <input name="_csrf_token" type="hidden" value="{{ csrf_token() }}" />
+
+                <label for="short_summary">Short Summary: </label>
+                <input id="short_summary" name="short_summary" type="text" value="{{item.short_summary}}"/>
+
+                <label for="longer_summary">Longer Summary: </label>
+                <textarea id="longer_summary" name="longer_summary" placeholder="Markdown summary of the idea." >{{item.long_summary}}</textarea>
+
+                <input type="submit" value="Submit" />
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

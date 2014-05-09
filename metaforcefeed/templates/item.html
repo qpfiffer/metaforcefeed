@@ -11,12 +11,18 @@
                 <p>{{extra}}</p>
                 {% endif %}
                 {% if user.username == item.created_by or user.admin %}
-                <p>
-                    <form action="{{ url_for('metaforcefeed.delete', slug=item.slug) }}" method="POST">
-                        <input name="_csrf_token" type="hidden" value="{{ csrf_token() }}" >
-                        <button type="submit">I don't care anymore.</button>
-                    </form>
-                </p>
+                <ul>
+                    <li>
+                        <p>
+                            <form action="{{ url_for('metaforcefeed.delete', slug=item.slug) }}" method="POST">
+                                <input name="_csrf_token" type="hidden" value="{{ csrf_token() }}" >
+                                <button type="submit">I don't care anymore.</button>
+                            </form>
+                        </p>
+                    </li>
+                    <li>
+                        <a href="{{ url_for('metaforcefeed.edit', slug=item.slug) }}">Edit Idea</a>
+                    </li>
                 {% endif %}
                 <form class="new_comment" method="POST">
                     <input name="_csrf_token" type="hidden" value="{{ csrf_token() }}" />

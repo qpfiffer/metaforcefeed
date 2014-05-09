@@ -4,7 +4,7 @@ from werkzeug.exceptions import BadRequestKeyError
 
 #from metaforcefeed.cache import ol_view_cache
 from metaforcefeed.utils import (ping_summary, sign_up, auth_user,
-                                 _get_summary_str, ALL_ITEMS_LIST)
+                                 _get_summary_str, ALL_ITEMS_LIST, edit_idea)
 import json, time, calendar
 
 app = Blueprint('metaforcefeed', __name__, template_folder='templates')
@@ -104,6 +104,29 @@ def submit():
         error = summary
 
     return render_template("submit.html", error=error)
+
+@app.route("/item/<slug>/edit", methods=['GET', 'POST'])
+def edit(slug):
+    error = None
+    item = g.db.get(_get_summary_str(slug))
+
+    if not item:
+        return redirect(url_for('metaforcefeed.root'))
+
+    if not session.get('username', None):
+        return redirect(url_for('metaforcefeed.login'))
+
+    if request.method == 'POST':
+        from metaforcefeed.utils import submit_idea
+        shorts = request.form.get("short_summary")
+        longs = request.form.get("longer_summary")
+        edited, summary = edit_idea(g.db, slug, shorts, longs)
+
+        if edited:
+            return redirect(url_for('metaforcefeed.root'))
+        error = summary
+
+    return render_template("edit.html", error=error, item=item)
 
 @app.route("/item/<slug>/delete", methods=['POST'])
 def delete(slug):

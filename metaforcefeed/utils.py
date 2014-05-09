@@ -62,6 +62,35 @@ def post_comment(connection, slug, comment, user):
 
     return (True, comment)
 
+def edit_idea(connection, slug, short_summary, long_summary):
+    error = ""
+    if not short_summary or len(short_summary) == 0:
+        return (False, "Short summary is blank.")
+
+    if not long_summary or len(long_summary) == 0:
+        return (False, "Long summary is blank.")
+
+    user = get_user()['user']
+
+    if not user:
+        return (False, "User not logged in.")
+
+    key = _get_summary_str(slug)
+    summary = connection.get(key)
+
+    if not summary:
+        return (False, "A post with that slug does not exist.")
+
+    if summary['created_by'] != user['username'] and user['admin'] != True:
+        return (False, "This isn't your post to edit.")
+
+    summary['short_summary'] = short_summary
+    summary['long_summary'] = long_summary
+
+    connection.set(key, summary)
+
+    return (True, summary)
+
 def submit_idea(connection, short_summary, long_summary):
     error = ""
     if not short_summary or len(short_summary) == 0:
