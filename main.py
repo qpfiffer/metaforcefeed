@@ -35,14 +35,14 @@ def profile_wrapper(to_profile):
                 "ms": "%.2fms" % (time_taken)
             }
             name = str(old_function)
-            print "{} {}".format(name, call_obj["ms"])
+            #print "{} {}".format(name, call_obj["ms"])
 
             if calls_dict.get(name):
                 calls_dict[name].append(call_obj)
             else:
                 calls_dict[name] = [call_obj]
 
-            print "Times called: {}".format(len(calls_dict[name]))
+            #print "Times called: {}".format(len(calls_dict[name]))
 
             return ret
         return new
