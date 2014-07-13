@@ -123,6 +123,25 @@ def submit():
 
     return render_template("submit.html", error=error)
 
+@app.route("/user/<username>", methods=['GET'])
+def user_history(username):
+    from metaforcefeed.utils import ALL_ACTIONS_LIST
+    #TODO: Refactor this when prefix matching is done.
+    all_actions = g.db.get(ALL_ACTIONS_LIST) or []
+
+    # Get last 25 actions from the db:
+    actions = []
+    for action_key in all_actions:
+        action = g.db.get(action_key)
+        if action is not None and action['user'] == username:
+            actions.append(action)
+
+    # Filter by newest and get only the last 25:
+    actions = sorted([x for x in actions if x],
+            key=lambda x: x['created_at'], reverse=True)[:25]
+
+    return render_template("user_history.html", username=username, all_actions=actions)
+
 @app.route("/item/<slug>/edit", methods=['GET', 'POST'])
 def edit(slug):
     error = None

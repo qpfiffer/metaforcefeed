@@ -1,0 +1,19 @@
+{% extends "index.html" %}
+{% block content %}
+<div class="grid grid-pad" id="content">
+    <div class="col-8-12">
+        <div class="content">
+            <p>User history for user {{username}}.</p>
+            <ul id="action_list">
+                {% for action in all_actions %}
+                <li class="action">
+                    <p>{{action.action_str}}</p>
+                    <span>{{action.created_at|unix_to_human}} &bull;</span>
+                    <span>{{action.user}} ☹</span>
+                </li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+</div>
+{% endblock %}
