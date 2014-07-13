@@ -1,12 +1,17 @@
 from bcrypt import hashpw, gensalt
 from calendar import calendar
 from slugify import slugify
+from datetime import datetime
 
 from metaforcefeed.conprocs import get_user
 
 import random, string, time
 
+# These globals are used to keep track of info.
 ALL_ITEMS_LIST = "all_items"
+ALL_ACTIONS_LIST = "all_actions"
+
+# Prefices used to differentiate things.
 USERS_PREFIX = "users"
 SUMMARY_PREFIX = "summary"
 ACTIVITY_PREFIX = "action"
@@ -19,6 +24,10 @@ def _get_user_str(username):
 
 def _get_summary_str(slug):
     return "{}{}".format(SUMMARY_PREFIX, slug)
+
+def _get_action_str(username):
+    created_at = int(time.mktime(datetime.now().utctimetuple()))
+    return "{}{}{}".format(ACTIVITY_PREFIX, username, created_at)
 
 def _hash_pw(username, pw, salt):
     return hashpw("{}{}".format(username, pw), salt)
@@ -61,6 +70,16 @@ def post_comment(connection, slug, comment, user):
     connection.set(key, summary)
 
     return (True, comment)
+
+def log_action(connection, action_str):
+    user = get_user()['user']
+    if not user:
+        return (False, "User not logged in.")
+
+    key = _get_action_str(user['username'])
+    print "Want to log action: {}".format(key)
+
+    return True
 
 def edit_idea(connection, slug, short_summary, long_summary):
     error = ""

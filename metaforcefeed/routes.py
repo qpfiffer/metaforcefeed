@@ -4,7 +4,8 @@ from werkzeug.exceptions import BadRequestKeyError
 
 #from metaforcefeed.cache import ol_view_cache
 from metaforcefeed.utils import (ping_summary, sign_up, auth_user,
-                                 _get_summary_str, ALL_ITEMS_LIST, edit_idea)
+                                 _get_summary_str, ALL_ITEMS_LIST, edit_idea,
+                                 log_action)
 import json, time, calendar
 
 app = Blueprint('metaforcefeed', __name__, template_folder='templates')
@@ -80,6 +81,9 @@ def item(slug):
         created, err = post_comment(g.db, slug, request.form['comment'], username)
         if not created:
             extra = err
+        else:
+            action_str = 'Commented on "{}".'.format(slug)
+            log_action(g.db, action_str)
 
 
     item = None
@@ -100,6 +104,8 @@ def submit():
         created, summary = submit_idea(g.db, shorts, longs)
 
         if created:
+            action_str = 'Created new item "{}".'.format(shorts)
+            log_action(g.db, action_str)
             return redirect(url_for('metaforcefeed.root'))
         error = summary
 
@@ -123,6 +129,8 @@ def edit(slug):
         edited, summary = edit_idea(g.db, slug, shorts, longs)
 
         if edited:
+            action_str = 'Edited item "{}".'.format(shorts)
+            log_action(g.db, action_str)
             return redirect(url_for('metaforcefeed.root'))
         error = summary
 
@@ -140,6 +148,10 @@ def delete(slug):
     all_items = g.db.get(ALL_ITEMS_LIST)
     all_items = filter(lambda x: x != _get_summary_str(slug), all_items)
     g.db.set(ALL_ITEMS_LIST, all_items)
+
+    action_str = 'Deleted an item.'
+    log_action(g.db, action_str)
+
     return redirect(url_for('metaforcefeed.root'))
 
 @app.route("/login", methods=['GET', 'POST'])
@@ -152,6 +164,7 @@ def login():
         if auth_user(g.db, username, password):
             session.permanent = True
             session['username'] = username
+
             return redirect(url_for('metaforcefeed.root'))
         error = "Could not log in for some reason."
     return render_template("login.html", error=error)
@@ -180,6 +193,10 @@ def register():
         if created:
             session.permanent = True
             session['username'] = user_obj['username']
+
+            action_str = 'Registered.'
+            log_action(g.db, action_str)
+
             return redirect(url_for('metaforcefeed.root'))
         # Well something didn't work right.
         error = user_obj
