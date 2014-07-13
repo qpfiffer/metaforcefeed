@@ -44,6 +44,7 @@ a:hover {
 }
 #item_list {
     list-style: none;
+    padding-left: 0px;
 }
 .item h3 {
     display: inline;
@@ -52,6 +53,27 @@ a:hover {
     margin-left: 4em;
 }
 .item .submitted_by {
+    font-size: 14px;
+    color: #74808A;
+    margin-top: 0.5em;
+}
+#admin_funcs {
+    padding-left: 0px;
+    list-style-type: none;
+    margin-top: 0px;
+    margin-bottom: 0px;
+}
+#admin_funcs > li {
+    display: inline-block;
+    margin-right: 2em;
+}
+#action_list {
+    list-style-type: none;
+}
+.comments {
+    list-style-type: none;
+}
+.action span, .comment span {
     font-size: 14px;
     color: #74808A;
 }

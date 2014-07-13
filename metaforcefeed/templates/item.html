@@ -5,13 +5,25 @@
         <div class="content">
             <div class="item">
                 <h3>{{item.short_summary}}</h3>
-
                 <p class="submitted_by">
                     <span data-slug="{{item.slug}}" class="small_arrow_up"></span>
                     <span class="pings">{{item.pings}} ✈</span>
                     <span>{{item.created_by}} ☹</span>
                     <span class="error"></span>
                 </p>
+                {% if user.username == item.created_by or user.admin %}
+                <ul id="admin_funcs">
+                    <li>
+                        <form action="{{ url_for('metaforcefeed.delete', slug=item.slug) }}" method="POST">
+                            <input name="_csrf_token" type="hidden" value="{{ csrf_token() }}" >
+                            <button type="submit">I don't care anymore.</button>
+                        </form>
+                    </li>
+                    <li>
+                        <a href="{{ url_for('metaforcefeed.edit', slug=item.slug) }}">Edit Idea</a>
+                    </li>
+                </ul>
+                {% endif %}
 
                 <p>{{item.long_summary|markdown}}</p>
                 {% if extra %}
@@ -22,20 +34,6 @@
     </div>
     <div class="col-6-12">
         <div class="content">
-                {% if user.username == item.created_by or user.admin %}
-                <ul>
-                    <li>
-                        <p>
-                            <form action="{{ url_for('metaforcefeed.delete', slug=item.slug) }}" method="POST">
-                                <input name="_csrf_token" type="hidden" value="{{ csrf_token() }}" >
-                                <button type="submit">I don't care anymore.</button>
-                            </form>
-                        </p>
-                    </li>
-                    <li>
-                        <a href="{{ url_for('metaforcefeed.edit', slug=item.slug) }}">Edit Idea</a>
-                    </li>
-                {% endif %}
                 <form class="new_comment" method="POST">
                     <input name="_csrf_token" type="hidden" value="{{ csrf_token() }}" />
                     <input type="submit" value="Submit" />
@@ -43,9 +41,12 @@
                 </form>
                 <ul class="comments">
                     {% for comment in item.comments %}
-                    <li>
+                    <li class="comment">
                         <p>{{comment.text|markdown}}</p>
-                        <p class="submitted_by">{{comment.username}}</p>
+                        {% if comment.created_at %}
+                            <span>{{comment.created_at|unix_to_human}} &bull;</span>
+                        {% endif %}
+                        <span>{{comment.username}} ☹</span>
                     </li>
                     {% endfor %}
                 </ul>

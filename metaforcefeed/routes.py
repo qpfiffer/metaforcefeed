@@ -12,18 +12,30 @@ app = Blueprint('metaforcefeed', __name__, template_folder='templates')
 
 @app.route("/", methods=['GET'])
 def root():
-    from metaforcefeed.utils import ALL_ITEMS_LIST
+    from metaforcefeed.utils import ALL_ITEMS_LIST, ALL_ACTIONS_LIST
     #TODO: Refactor this when prefix matching is done.
     all_items = g.db.get(ALL_ITEMS_LIST) or []
+    all_actions = g.db.get(ALL_ACTIONS_LIST) or []
 
+    # Get all ideas from the db:
     passed_items = []
     for item_key in all_items:
         passed_items.append(g.db.get(item_key))
 
+    # Filter out Nones and sort by pings:
     passed_items = sorted([x for x in passed_items if x],
         key=lambda x: x['pings'], reverse=False)
 
-    return render_template("index.html", items=passed_items)
+    # Get last 25 actions from the db:
+    actions = []
+    for action_key in all_actions:
+        actions.append(g.db.get(action_key))
+
+    # Filter by newest and get only the last 25:
+    actions = sorted([x for x in actions if x],
+            key=lambda x: x['created_at'], reverse=True)[:25]
+
+    return render_template("index.html", items=passed_items, all_actions=actions)
 
 @app.route("/ping/<slug>", methods=['POST'])
 def ping(slug):

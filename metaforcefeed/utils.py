@@ -25,8 +25,7 @@ def _get_user_str(username):
 def _get_summary_str(slug):
     return "{}{}".format(SUMMARY_PREFIX, slug)
 
-def _get_action_str(username):
-    created_at = int(time.mktime(datetime.now().utctimetuple()))
+def _get_action_str(username, created_at):
     return "{}{}{}".format(ACTIVITY_PREFIX, username, created_at)
 
 def _hash_pw(username, pw, salt):
@@ -62,8 +61,10 @@ def post_comment(connection, slug, comment, user):
     if not summary:
         return (False, "Summary with that key does not exist.")
 
+    created_at = int(time.mktime(datetime.now().utctimetuple()))
     comment_obj = {
         'text': comment,
+        'created_at': created_at,
         'username': user
     }
     summary['comments'].append(comment_obj)
@@ -76,8 +77,22 @@ def log_action(connection, action_str):
     if not user:
         return (False, "User not logged in.")
 
-    key = _get_action_str(user['username'])
-    print "Want to log action: {}".format(key)
+    created_at = int(time.mktime(datetime.now().utctimetuple()))
+    key = _get_action_str(user['username'], created_at)
+    new_action = {
+        'user': user['username'],
+        'action_str': action_str,
+        'created_at': created_at
+    }
+    connection.set(key, new_action)
+
+    # TODO: Refactor this when we have compare-and-set
+    all_actions = connection.get(ALL_ACTIONS_LIST)
+    if all_actions:
+        all_actions.append(key)
+    else:
+        all_actions = [key]
+    connection.set(ALL_ACTIONS_LIST, all_actions)
 
     return True
 

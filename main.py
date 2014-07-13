@@ -8,6 +8,7 @@ from olegdb import OlegDB
 from metaforcefeed.routes import app as routes
 from metaforcefeed.utils import random_csrf, auth_user, enable_admin
 from metaforcefeed.conprocs import app as conprocs
+from metaforcefeed.filters import unix_to_human
 import sys, getopt, random, string, json, time
 
 app = Flask('metaforcefeed')
@@ -15,6 +16,7 @@ app.register_blueprint(routes)
 app.register_blueprint(conprocs)
 app.config['CACHE'] = True
 app.session_interface = OlegDBSessionInterface()
+app.jinja_env.filters['unix_to_human'] = unix_to_human
 Markdown(app)
 
 def profile_wrapper(to_profile):
