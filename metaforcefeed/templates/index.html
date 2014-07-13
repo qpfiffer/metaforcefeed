@@ -10,22 +10,30 @@
             <div class="col-8-12">
                 <div class="content">
                     <!-- <h1 id="main_header"><a href="{{ url_for('metaforcefeed.root') }}">#metaforcefeed</a></h1> "Bash disinformation campaign."</span> -->
-                    <h1 id="main_header"><a href="{{ url_for('metaforcefeed.root') }}">#metaforcefeed</a></h1>
+                    <h2 id="main_header"><a href="{{ url_for('metaforcefeed.root') }}">#metaforcefeed</a></h2>
                     <span style="color: #FFF; background-color: #000;">
-                        "<span style="color: #FF4ABD;">nijotz</span> | You just manage their addictions until they die"
+                        <span style="color: #FF4ABD;">nijotz</span> | You just manage their addictions until they die
                     </span>
                 </div>
             </div>
             <div class="col-4-12">
                 <div class="content">
                     <ul>
-                        {% if user %}
-                        <li><a href="{{ url_for('metaforcefeed.submit') }}">Submit New</a></li>
-                        <li><a href="{{ url_for('metaforcefeed.logout') }}">Logout</a></li>
-                        {% else %}
-                        <li><a href="{{ url_for('metaforcefeed.login') }}">Login</a></li>
-                        {% endif %}
+                        <span>
+                            {% if user %}
+                            <li><a href="{{ url_for('metaforcefeed.submit') }}">Submit New</a></li>
+                            <li><a href="{{ url_for('metaforcefeed.logout') }}">Logout</a></li>
+                            {% else %}
+                            <li><a href="{{ url_for('metaforcefeed.login') }}">Login</a></li>
+                            {% endif %}
+                        </span>
                     </ul>
+                </div>
+            </div>
+        </div>
+        <div id="quotes" class="grid grid-pad">
+            <div class="col-8-12">
+                <div class="content">
                 </div>
             </div>
         </div>

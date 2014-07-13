@@ -1,5 +1,13 @@
+html {
+    font-family: 'Open Sans', Helvetica, Arial, sans-serif;
+}
 #nav {
     border-bottom: solid 1px #000;
+}
+#nav li {
+    display: inline-block;
+    list-style-type: none;
+    padding-right: 2em;
 }
 #main_header {
     display: inline;
