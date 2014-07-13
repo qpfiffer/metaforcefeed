@@ -45,7 +45,7 @@
                 </form>
                 <ul class="comments">
                     {% for comment in item.comments %}
-                    <li class="comment">
+                    <li class="{{loop.cycle('odd', 'even')}} comment">
                         <p>{{comment.text|markdown}}</p>
                         {% if comment.created_at %}
                             <span>{{comment.created_at|unix_to_human}} &bull;</span>

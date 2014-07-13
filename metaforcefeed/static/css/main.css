@@ -75,6 +75,14 @@ a:hover {
 }
 .comments {
     list-style-type: none;
+    padding-left: 0px;
+}
+.comments li {
+    padding-bottom: 1em;
+    padding: 0.5em;
+}
+.comments li.odd {
+    background-color: #EFEFEF;
 }
 .action span, .comment span {
     font-size: 14px;
