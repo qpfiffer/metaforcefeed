@@ -40,8 +40,8 @@
         <div class="content">
                 <form class="new_comment" method="POST">
                     <input name="_csrf_token" type="hidden" value="{{ csrf_token() }}" />
-                    <input type="submit" value="Submit" />
                     <textarea name="comment" placeholder="SPEAK, MORTAL."></textarea>
+                    <input type="submit" value="Submit" />
                 </form>
                 <ul class="comments">
                     {% for comment in item.comments %}
