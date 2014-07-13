@@ -14,10 +14,14 @@
                 {% if user.username == item.created_by or user.admin %}
                 <ul id="admin_funcs">
                     <li>
-                        <form action="{{ url_for('metaforcefeed.delete', slug=item.slug) }}" method="POST">
-                            <input name="_csrf_token" type="hidden" value="{{ csrf_token() }}" >
-                            <button type="submit">I don't care anymore.</button>
-                        </form>
+                        <a id="delete_btn" href="#">Delete</a>
+                        <div class="hidden" id="delete_form">
+                            <form action="{{ url_for('metaforcefeed.delete', slug=item.slug) }}" method="POST">
+                                <input name="_csrf_token" type="hidden" value="{{ csrf_token() }}" >
+                                <button class="red" type="submit">I don't care anymore.</button>
+                            </form>
+                            <button id="nevermind">Nevermind.</button>
+                        </div>
                     </li>
                     <li>
                         <a href="{{ url_for('metaforcefeed.edit', slug=item.slug) }}">Edit Idea</a>
@@ -54,4 +58,10 @@
         </div>
     </div>
 </div>
+{% endblock %}
+{% block endscripts %}{{ super() }}
+    <script src="{{ url_for('static', filename='js/item.js') }}"></script>
+    <script>
+        item_init();
+    </script>
 {% endblock %}

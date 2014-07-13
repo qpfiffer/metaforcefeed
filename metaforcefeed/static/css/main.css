@@ -52,6 +52,9 @@ a:hover {
 #item_list .submitted_by {
     margin-left: 4em;
 }
+.hidden {
+    display: none;
+}
 .item .submitted_by {
     font-size: 14px;
     color: #74808A;
@@ -100,4 +103,18 @@ a:hover {
     min-width: 512px;
     min-height: 150px;
     display: block;
+}
+button:hover {
+    cursor: pointer;
+}
+button {
+    background: #348BDD;
+    border: 1px solid #2074c3;
+    padding: 1em;
+    color: #EFEFEF;
+    border-radius: 3px;
+}
+button.red {
+    background: #EE3F3F;
+    border: 1px solid #FF2F2F;
 }

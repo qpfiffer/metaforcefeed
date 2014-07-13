@@ -73,11 +73,13 @@
             </div>
         </div>
         {% endblock %}
+        {% block endscripts %}
         <script src="{{ url_for('static', filename='js/ping.js') }}"></script>
         <script>
             ping_url = "{{url_for('metaforcefeed.ping', slug='0')}}";
             csrf_token = "{{ session['_csrf_token'] }}";
             ping_init();
         </script>
+        {% endblock %}
     </body>
 </html>
