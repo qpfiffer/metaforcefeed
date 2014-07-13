@@ -31,12 +31,6 @@
                 </div>
             </div>
         </div>
-        <div id="quotes" class="grid grid-pad">
-            <div class="col-8-12">
-                <div class="content">
-                </div>
-            </div>
-        </div>
         {% block content %}
         <div class="grid grid-pad" id="content">
             <div class="col-6-12">
@@ -46,12 +40,16 @@
                             {% if item %}
                             <li>
                                 <div class="item">
-                                    <div data-slug="{{item.slug}}" class="arrow_up"></div><span class="pings">{{item.pings}}</span>
+                                    <div data-slug="{{item.slug}}" class="arrow_up"></div>
                                     <h3><a href="{{ url_for('metaforcefeed.item', slug=item.slug) }}">
                                             {{item.short_summary}}
                                     </a></h3>
-                                    <span>Comments: {{item.comments|length}}</span>
-                                    <span class="error"></span>
+                                    <p class="submitted_by">
+                                        <span class="pings">{{item.pings}} ✈</span>
+                                        <span>{{item.created_by}} ☹</span>
+                                        <span>{{item.comments|length}} ✍</span>
+                                        <span class="error"></span>
+                                    </p>
                                 </div>
                             </li>
                             {% endif %}

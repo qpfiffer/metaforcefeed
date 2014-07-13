@@ -1,6 +1,17 @@
 html {
     font-family: 'Open Sans', Helvetica, Arial, sans-serif;
 }
+a {
+    color: #3570C3;
+    text-decoration: none;
+}
+h1 a, h2 a {
+    color: #3F3F3F;
+}
+a:hover {
+    color: #D70A16;
+    text-decoration: underline;
+}
 #nav {
     border-bottom: solid 1px #000;
 }
@@ -29,7 +40,7 @@ html {
     min-width: 100%;
 }
 .error {
-    color: red;
+    color: #EE4F4F;
 }
 #item_list {
     list-style: none;
@@ -37,8 +48,21 @@ html {
 .item h3 {
     display: inline;
 }
+#item_list .submitted_by {
+    margin-left: 4em;
+}
 .item .submitted_by {
     font-size: 14px;
+    color: #74808A;
+}
+.small_arrow_up {
+    display: inline-block;
+    width: 0;
+    height: 0;
+    border-left: 7px solid transparent;
+    border-right: 7px solid transparent;
+    border-bottom: 7px solid black;
+    cursor: pointer;
 }
 .arrow_up {
     display: inline-block;

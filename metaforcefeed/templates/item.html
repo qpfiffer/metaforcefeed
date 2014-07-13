@@ -1,15 +1,27 @@
 {% extends "index.html" %}
 {% block content %}
 <div class="grid grid-pad" id="content">
-    <div class="col-12-12">
+    <div class="col-6-12">
         <div class="content">
             <div class="item">
-                <h3>{{item.short_summary}}</h3><span class="pings">{{item.pings}} Pings</span>
-                <p class="submitted_by">Submitted by {{item.created_by}}</p>
+                <h3>{{item.short_summary}}</h3>
+
+                <p class="submitted_by">
+                    <span data-slug="{{item.slug}}" class="small_arrow_up"></span>
+                    <span class="pings">{{item.pings}} ✈</span>
+                    <span>{{item.created_by}} ☹</span>
+                    <span class="error"></span>
+                </p>
+
                 <p>{{item.long_summary|markdown}}</p>
                 {% if extra %}
                 <p>{{extra}}</p>
                 {% endif %}
+            </div>
+        </div>
+    </div>
+    <div class="col-6-12">
+        <div class="content">
                 {% if user.username == item.created_by or user.admin %}
                 <ul>
                     <li>
