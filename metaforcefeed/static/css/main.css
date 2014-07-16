@@ -12,6 +12,9 @@ a:hover {
     color: #D70A16;
     text-decoration: underline;
 }
+code {
+    display: block;
+}
 #nav {
     border-bottom: solid 1px #000;
 }
