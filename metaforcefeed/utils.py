@@ -22,6 +22,10 @@ SLUG_SIZE=45
 def _get_user_str(username):
     return "{}{}".format(USERS_PREFIX, username)
 
+def set_user(connection, userobj):
+    user_str = _get_user_str(userobj['username'])
+    return connection.set(user_str, userobj)
+
 def _get_summary_str(slug):
     return "{}{}".format(SUMMARY_PREFIX, slug)
 

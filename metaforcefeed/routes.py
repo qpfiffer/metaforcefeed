@@ -3,9 +3,10 @@ from flask import (g, request, current_app, Blueprint, render_template,
 from werkzeug.exceptions import BadRequestKeyError
 
 #from metaforcefeed.cache import ol_view_cache
-from metaforcefeed.utils import (ping_summary, sign_up, auth_user,
+from metaforcefeed.utils import (ping_summary, sign_up, auth_user, set_user,
                                  _get_summary_str, ALL_ITEMS_LIST, edit_idea,
                                  log_action)
+from metaforcefeed.conprocs import get_user
 import json, time, calendar
 
 app = Blueprint('metaforcefeed', __name__, template_folder='templates')
@@ -40,6 +41,11 @@ def root():
 @app.route("/ping/<slug>", methods=['POST'])
 def ping(slug):
     to_return = { 'success': True, 'error': "" }
+    user = get_user()['user']
+
+    if not user:
+        return abort(503)
+
     if not slug:
         return abort(404)
 
@@ -51,12 +57,13 @@ def ping(slug):
         'pinged': slug,
         'when': seconds
     }
-    pings = session.get('pings', None)
+    pings = user.get('pings', None)
     def _handle_creation():
         # Inline because fuck a scope
         created, obj = ping_summary(g.db, slug, expiration)
         if created:
-            session['pings'][slug] = ping_obj
+            user['pings'][slug] = ping_obj
+            set_user(g.db, user)
             to_return['ping_obj'] = obj
             return Response(json.dumps(to_return), mimetype="application/json")
         else:
@@ -64,7 +71,8 @@ def ping(slug):
             return Response(json.dumps(to_return), mimetype="application/json")
 
     if not pings:
-        session['pings'] = { slug: ping_obj }
+        user['pings'] = { slug: ping_obj }
+        set_user(g.db, user)
         return _handle_creation()
     else:
         last_ping = pings.get(slug, None)
