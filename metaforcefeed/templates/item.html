@@ -8,7 +8,7 @@
                 <p class="submitted_by">
                     <span data-slug="{{item.slug}}" class="small_arrow_up"></span>
                     <span class="pings">{{item.pings}} ✈</span>
-                    <span><a href="{{ url_for('metaforcefeed.user_history', username=item.created_by) }}">{{item.created_by}}</a> ☹</span>
+                    <span><a href="{{ url_for('metaforcefeed.user_history', username=item.created_by) }}">{{item.created_by}}</a> {{item.created_by|user_badge}}</span>
                     <span class="error"></span>
                 </p>
                 {% if user.username == item.created_by or user.admin %}
@@ -50,7 +50,7 @@
                         {% if comment.created_at %}
                             <span>{{comment.created_at|unix_to_human}} &bull;</span>
                         {% endif %}
-                        <span><a href="{{ url_for('metaforcefeed.user_history', username=comment.username) }}">{{comment.username}}</a> ☹</span>
+                        <span><a href="{{ url_for('metaforcefeed.user_history', username=comment.username) }}">{{comment.username}}</a> {{comment.username|user_badge}}</span>
                     </li>
                     {% endfor %}
                 </ul>

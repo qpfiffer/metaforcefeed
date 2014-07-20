@@ -9,7 +9,7 @@
                 <li class="action">
                     <p>{{action.action_str}}</p>
                     <span>{{action.created_at|unix_to_human}} &bull;</span>
-                    <span>{{action.user}} ☹</span>
+                    <span>{{action.user}} {{action.user|user_badge}}</span>
                 </li>
                 {% endfor %}
             </ul>
