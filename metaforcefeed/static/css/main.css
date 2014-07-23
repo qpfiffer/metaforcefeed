@@ -1,131 +1,132 @@
+/* vim: set ts=4 sw=4 noet : */
 html {
-    font-family: 'Open Sans', Helvetica, Arial, sans-serif;
+	font-family: 'Open Sans', Helvetica, Arial, sans-serif;
 }
 code {
-    white-space: pre;
+	white-space: pre-wrap;
 }
 a {
-    color: #3570C3;
-    text-decoration: none;
+	color: #3570C3;
+	text-decoration: none;
 }
 h1 a, h2 a {
-    color: #3F3F3F;
+	color: #3F3F3F;
 }
 a:hover {
-    color: #D70A16;
-    text-decoration: underline;
+	color: #D70A16;
+	text-decoration: underline;
 }
 #nav {
-    border-bottom: solid 1px #000;
+	border-bottom: solid 1px #000;
 }
 #nav li {
-    display: inline-block;
-    list-style-type: none;
-    padding-right: 2em;
+	display: inline-block;
+	list-style-type: none;
+	padding-right: 2em;
 }
 #main_header {
-    display: inline;
-    margin-right: 2em;
+	display: inline;
+	margin-right: 2em;
 }
 #login_form input {
-    display: block;
+	display: block;
 }
 #registration_form input {
-    display: block;
+	display: block;
 }
 #submission_form input[type=text], #submission_form textarea {
-    display: block;
-    width: 100%;
-    padding: 5px;
+	display: block;
+	width: 100%;
+	padding: 5px;
 }
 #submission_form textarea {
-    min-height: 10em;
-    min-width: 100%;
+	min-height: 10em;
+	min-width: 100%;
 }
 .error {
-    color: #EE4F4F;
+	color: #EE4F4F;
 }
 #item_list {
-    list-style: none;
-    padding-left: 0px;
+	list-style: none;
+	padding-left: 0px;
 }
 .item h3 {
-    display: inline;
+	display: inline;
 }
 #item_list .submitted_by {
-    margin-left: 4em;
+	margin-left: 4em;
 }
 .hidden {
-    display: none;
+	display: none;
 }
 .item .submitted_by {
-    font-size: 14px;
-    color: #74808A;
-    margin-top: 0.5em;
+	font-size: 14px;
+	color: #74808A;
+	margin-top: 0.5em;
 }
 #admin_funcs {
-    padding-left: 0px;
-    list-style-type: none;
-    margin-top: 0px;
-    margin-bottom: 0px;
+	padding-left: 0px;
+	list-style-type: none;
+	margin-top: 0px;
+	margin-bottom: 0px;
 }
 #admin_funcs > li {
-    display: inline-block;
-    margin-right: 2em;
+	display: inline-block;
+	margin-right: 2em;
 }
 #action_list {
-    list-style-type: none;
+	list-style-type: none;
 }
 .comments {
-    list-style-type: none;
-    padding-left: 0px;
+	list-style-type: none;
+	padding-left: 0px;
 }
 .comments li {
-    padding-bottom: 1em;
-    padding: 0.5em;
+	padding-bottom: 1em;
+	padding: 0.5em;
 }
 .comments li.odd {
-    background-color: #EFEFEF;
+	background-color: #EFEFEF;
 }
 .action span, .comment span {
-    font-size: 14px;
-    color: #74808A;
+	font-size: 14px;
+	color: #74808A;
 }
 .small_arrow_up {
-    display: inline-block;
-    width: 0;
-    height: 0;
-    border-left: 7px solid transparent;
-    border-right: 7px solid transparent;
-    border-bottom: 7px solid black;
-    cursor: pointer;
+	display: inline-block;
+	width: 0;
+	height: 0;
+	border-left: 7px solid transparent;
+	border-right: 7px solid transparent;
+	border-bottom: 7px solid black;
+	cursor: pointer;
 }
 .arrow_up {
-    display: inline-block;
-    margin-right: 2em;
-    width: 0;
-    height: 0;
-    border-left: 10px solid transparent;
-    border-right: 10px solid transparent;
-    border-bottom: 10px solid black;
-    cursor: pointer;
+	display: inline-block;
+	margin-right: 2em;
+	width: 0;
+	height: 0;
+	border-left: 10px solid transparent;
+	border-right: 10px solid transparent;
+	border-bottom: 10px solid black;
+	cursor: pointer;
 }
 .new_comment textarea {
-    min-width: 512px;
-    min-height: 150px;
-    display: block;
+	min-width: 512px;
+	min-height: 150px;
+	display: block;
 }
 button:hover {
-    cursor: pointer;
+	cursor: pointer;
 }
 button {
-    background: #348BDD;
-    border: 1px solid #2074c3;
-    padding: 1em;
-    color: #EFEFEF;
-    border-radius: 3px;
+	background: #348BDD;
+	border: 1px solid #2074c3;
+	padding: 1em;
+	color: #EFEFEF;
+	border-radius: 3px;
 }
 button.red {
-    background: #EE3F3F;
-    border: 1px solid #FF2F2F;
+	background: #EE3F3F;
+	border: 1px solid #FF2F2F;
 }
