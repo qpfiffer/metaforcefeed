@@ -47,7 +47,7 @@
                                     </a></h3>
                                     <p class="submitted_by">
                                         <span class="pings">{{item.pings}} ✈</span>
-                                        <span><a href="{{ url_for('metaforcefeed.user_history', username=item.created_by) }}">{{item.created_by}}</a> {{item.created_by|user_badge}}</span>
+                                        <span><a href="{{ url_for('metaforcefeed.user_history', username=item.created_by) }}">{{item.created_by}}</a> {{item.created_by|user_badge|safe}}</span>
                                         <span>{{item.comments|length}} ✍</span>
                                         <span class="error"></span>
                                     </p>
@@ -65,7 +65,7 @@
                         <li class="action">
                             <p>{{action.action_str}}</p>
                             <span>{{action.created_at|unix_to_human}} &bull;</span>
-                            <span><a href="{{ url_for('metaforcefeed.user_history', username=action.user) }}">{{action.user}}</a> {{action.user|user_badge}}</span>
+                            <span><a href="{{ url_for('metaforcefeed.user_history', username=action.user) }}">{{action.user}}</a> {{action.user|user_badge|safe}}</span>
                         </li>
                         {% endfor %}
                     </ul>

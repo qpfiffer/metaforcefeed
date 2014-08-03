@@ -50,6 +50,14 @@ a:hover {
 	list-style: none;
 	padding-left: 0px;
 }
+#item_list li {
+	padding-top: 4px;
+	padding-bottom: 1px;
+	padding-left: 4px;
+}
+#item_list li:hover {
+	background-color: #EFEFEF;
+}
 .item h3 {
 	display: inline;
 }
@@ -129,4 +137,7 @@ button {
 button.red {
 	background: #EE3F3F;
 	border: 1px solid #FF2F2F;
+}
+.user_badge {
+	color: #FF4742 !important;
 }
