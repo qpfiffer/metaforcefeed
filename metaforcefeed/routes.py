@@ -90,6 +90,7 @@ def ping(slug):
 @app.route("/item/<slug>", methods=['GET', 'POST'])
 def item(slug):
     extra = None
+    item = None
     if not slug:
         return abort(404)
 
@@ -102,12 +103,13 @@ def item(slug):
         if not created:
             extra = err
         else:
-            action_str = 'Commented on "{}".'.format(slug)
+            item = g.db.get(_get_summary_str(slug))
+            action_str = 'Commented on "{}".'.format(item['short_summary'])
             log_action(g.db, action_str)
 
 
-    item = None
-    item = g.db.get(_get_summary_str(slug))
+    if not item:
+        item = g.db.get(_get_summary_str(slug))
 
     return render_template("item.html", item=item, extra=extra)
 
@@ -168,7 +170,7 @@ def edit(slug):
         edited, summary = edit_idea(g.db, slug, shorts, longs)
 
         if edited:
-            action_str = 'Edited item "{}".'.format(shorts)
+            action_str = 'Edited item "{}".'.format(item['short_summary'])
             log_action(g.db, action_str)
             return redirect(url_for('metaforcefeed.root'))
         error = summary
@@ -181,14 +183,15 @@ def delete(slug):
         return abort(404)
 
     item = None
-    item = g.db.delete(_get_summary_str(slug))
+    item = g.db.get(_get_summary_str(slug))
+    g.db.delete(_get_summary_str(slug))
 
     # NOW WE HAVE TO GO DELETE THEM FROM THE LIST
     all_items = g.db.get(ALL_ITEMS_LIST)
     all_items = filter(lambda x: x != _get_summary_str(slug), all_items)
     g.db.set(ALL_ITEMS_LIST, all_items)
 
-    action_str = 'Deleted an item.'
+    action_str = 'Deleted "{}".'.format(item['short_summary'])
     log_action(g.db, action_str)
 
     return redirect(url_for('metaforcefeed.root'))
