@@ -95,7 +95,7 @@ def main(argv):
         elif opt in ("--port"):
             port = int(arg)
         elif opt in ("--admin-enable"):
-            enable_admin(OlegDB(), arg)
+            enable_admin(OlegDB(host='localhost', port='38080', db_name='metaforcefeed'), arg)
 
     if debug:
         app.config['CACHE'] = False
