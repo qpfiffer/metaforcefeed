@@ -10,7 +10,7 @@ ipython==2.0.0
 itsdangerous==0.24
 msgpack-python==0.4.2
 oleg-flask-sessions==0.2.4
-olegdb-python==0.1.2
+olegdb-python==0.1.4
 pycparser==2.10
 python-slugify==0.0.7
 requests==2.2.1
