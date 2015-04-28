@@ -15,7 +15,7 @@ app = Flask('metaforcefeed')
 app.register_blueprint(routes)
 app.register_blueprint(conprocs)
 app.config['CACHE'] = True
-app.session_interface = OlegDBSessionInterface()
+app.session_interface = OlegDBSessionInterface(host='localhost', port=38080, db_name='metaforcefeed')
 app.jinja_env.filters['unix_to_human'] = unix_to_human
 app.jinja_env.filters['user_badge'] = user_badge
 Markdown(app)
@@ -71,7 +71,7 @@ def setup_db():
             in_data = False
         if not token or not (in_form or in_data):
             abort(403)
-    g.db = ProlegDB()
+    g.db = ProlegDB(host='localhost', port=38080, db_name='metaforcefeed')
 
 def generate_csrf_token():
     if '_csrf_token' not in session:
