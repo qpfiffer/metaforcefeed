@@ -1,0 +1,26 @@
+{% extends "index.html" %}
+{% block content %}
+<div class="grid grid-pad" id="content">
+    <div class="col-6-12">
+        <div class="content">
+            <ul id="item_list">
+                {% for event in events|reverse %}
+                    {% if event %}
+                    <li>
+                        <div class="item">
+                            <h3><a href="#">
+                                    {{event.name}}
+                            </a></h3>
+                            <p class="submitted_by">
+                                <span><a href="{{ url_for('metaforcefeed.user_history', username=event.created_by) }}">{{event.created_by}}</a> {{event.created_by|user_badge|safe}}</span>
+                                <span>{{event.comments|length}} ✍</span>
+                            </p>
+                        </div>
+                    </li>
+                    {% endif %}
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,41 @@
+{% extends "index.html" %}
+{% block content %}
+<div class="grid grid-pad" id="content">
+    <div class="col-6-12">
+        <div class="content">
+            {% if error %}
+            <p class="error">{{error}}</p>
+            {% endif %}
+            <form id="submission_form" method="post">
+                <input name="_csrf_token" type="hidden" value="{{ csrf_token() }}" />
+
+                <p>
+                    <label for="day">Day: </label>
+                    <input id="day" name="day" type="date" />
+                </p>
+
+                <p>
+                    <label for="from_time">From </label>
+                    <input id="from_time" name="from_time" />
+
+                    <span> to </span>
+
+                    <input id="to_time" name="to_time" />
+                </p>
+
+                <p>
+                    <label for="name">Name: </label>
+                    <input id="name" name="name" type="text" />
+                </p>
+
+                <p>
+                    <label for="description">Description: </label>
+                    <textarea id="description" name="description" placeholder="Description of the event." ></textarea>
+                </p>
+
+                <input type="submit" value="Submit" />
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,5 +1,5 @@
 from bcrypt import hashpw, gensalt
-from calendar import calendar
+from calendar import calendar, timegm
 from slugify import slugify
 from datetime import datetime
 
@@ -10,10 +10,12 @@ import random, string, time
 # These globals are used to keep track of info.
 ALL_ITEMS_LIST = "all_items"
 ALL_ACTIONS_LIST = "all_actions"
+ALL_EVENTS_LIST = "all_events"
 
 # Prefices used to differentiate things.
 USERS_PREFIX = "users"
 SUMMARY_PREFIX = "summary"
+EVENTS_PREFIX = "event"
 ACTIVITY_PREFIX = "action"
 SCHEMA_VERSION = "0001"
 
@@ -28,6 +30,9 @@ def set_user(connection, userobj):
 
 def _get_summary_str(slug):
     return "{}{}".format(SUMMARY_PREFIX, slug)
+
+def _get_event_str(slug, stamp):
+    return "{}{}{}".format(EVENTS_PREFIX, slug, stamp)
 
 def _get_action_str(username, created_at):
     return "{}{}{}".format(ACTIVITY_PREFIX, username, created_at)
@@ -128,6 +133,58 @@ def edit_idea(connection, slug, short_summary, long_summary):
     connection.set(key, summary)
 
     return (True, summary)
+
+def submit_event(connection, day, from_time, to_time, name, description):
+    from datetime import datetime
+    error = ""
+    if not day or len(day) == 0:
+        return (False, "Day is blank.")
+
+    if not name or len(name) == 0:
+        return (False, "Name is blank.")
+
+    user = get_user()["user"]
+
+    if not user:
+        return (False, "User not logged in.")
+
+    converted_date = None
+    try:
+        converted_date = datetime.strptime(day, "%Y-%m-%d")
+    except ValueError:
+        return (False, "Date invalid. Should be of the form 'YYYY-MM-DD'.")
+
+    slug = slugify(name)[:SLUG_SIZE]
+    stamp = timegm(converted_date.timetuple())
+    key = _get_event_str(slug, stamp)
+
+    exists = connection.has_key(key)
+    if exists:
+        return (False, "An event with that name on that day already exists.")
+
+    event = {
+        "slug": slug,
+        "day": stamp,
+        "from_time": from_time,
+        "to_time": to_time,
+        "name": name,
+        "description": description,
+        "api_version": SCHEMA_VERSION,
+        "created_by": user["username"],
+        "comments": [],
+    }
+
+    connection.set(key, event)
+
+    # TODO: Refactor this when we have compare-and-set
+    all_events = connection.get(ALL_EVENTS_LIST)
+    if all_events:
+        all_events.append(key)
+    else:
+        all_events = [key]
+    connection.set(ALL_EVENTS_LIST, all_events)
+
+    return (True, event)
 
 def submit_idea(connection, short_summary, long_summary):
     error = ""

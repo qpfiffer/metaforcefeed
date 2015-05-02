@@ -5,7 +5,7 @@ from werkzeug.exceptions import BadRequestKeyError
 #from metaforcefeed.cache import ol_view_cache
 from metaforcefeed.utils import (ping_summary, sign_up, auth_user, set_user,
                                  _get_summary_str, ALL_ITEMS_LIST, edit_idea,
-                                 log_action)
+                                 log_action, ALL_EVENTS_LIST)
 from metaforcefeed.conprocs import get_user
 import json, time, calendar
 
@@ -86,6 +86,44 @@ def ping(slug):
         to_return['error'] = "You need to wait 24 hours to ping again."
 
     return Response(json.dumps(to_return), mimetype="application/json")
+
+@app.route("/calendar", methods=['GET'])
+def calendar():
+    all_events = g.db.get(ALL_EVENTS_LIST) or []
+
+    passed_events = []
+    for e_key in all_events:
+        passed_events.append(g.db.get(e_key))
+
+    # Filter out Nones and sort by pings:
+    passed_events = sorted([x for x in passed_events if x],
+        key=lambda x: x['day'], reverse=False)
+
+    return render_template("calendar.html", events=passed_events)
+
+@app.route("/calendar/new", methods=['GET', 'POST'])
+def calendar_new():
+    error = None
+    if not session.get('username', None):
+        return redirect(url_for('metaforcefeed.login'))
+
+    if request.method == 'POST':
+        from metaforcefeed.utils import submit_event
+        day = request.form.get("day")
+        from_time = request.form.get("from_time")
+        to_time = request.form.get("to_time")
+        name = request.form.get("name")
+        description = request.form.get("description")
+
+        created, event = submit_event(g.db, day, from_time, to_time, name, description)
+
+        if created:
+            action_str = 'Created new event "{}".'.format(name)
+            log_action(g.db, action_str)
+            return redirect(url_for('metaforcefeed.calendar'))
+        error = event
+
+    return render_template("calendar_new.html", error=error)
 
 @app.route("/item/<slug>", methods=['GET', 'POST'])
 def item(slug):

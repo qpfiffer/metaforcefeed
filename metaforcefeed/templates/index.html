@@ -7,7 +7,7 @@
     </head>
     <body>
         <div id="nav" class="grid grid-pad">
-            <div class="col-8-12">
+            <div class="col-7-12">
                 <div class="content">
                     <!-- <h1 id="main_header"><a href="{{ url_for('metaforcefeed.root') }}">#metaforcefeed</a></h1> "Bash disinformation campaign."</span> -->
                     <h2 id="main_header"><a href="{{ url_for('metaforcefeed.root') }}">#metaforcefeed</a></h2>
@@ -16,12 +16,14 @@
                     </span>
                 </div>
             </div>
-            <div class="col-4-12">
+            <div class="col-5-12">
                 <div class="content">
                     <ul>
                         <span>
+                            <li><a href="{{ url_for('metaforcefeed.calendar') }}">Events</a></li>
                             {% if user %}
-                            <li><a href="{{ url_for('metaforcefeed.submit') }}">Submit New</a></li>
+                            <li><a href="{{ url_for('metaforcefeed.submit') }}">New Idea</a></li>
+                            <li><a href="{{ url_for('metaforcefeed.calendar_new') }}">New Event</a></li>
                             <li><a href="{{ url_for('metaforcefeed.logout') }}">Logout</a></li>
                             {% else %}
                             <li><a href="{{ url_for('metaforcefeed.register') }}">Register</a></li>
