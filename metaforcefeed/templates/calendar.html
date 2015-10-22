@@ -8,7 +8,7 @@
                     {% if event %}
                     <li>
                         <div class="item">
-                            <h3><a href="#">
+                            <h3>{{event.day|event_to_human}}: <a href="{{ url_for('metaforcefeed.calendar_event', slug=event.slug, stamp=event.day) }}">
                                     {{event.name}}
                             </a></h3>
                             <p class="submitted_by">

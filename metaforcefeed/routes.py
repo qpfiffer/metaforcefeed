@@ -1,3 +1,4 @@
+from datetime import datetime
 from flask import (g, request, current_app, Blueprint, render_template,
                    redirect, url_for, session, abort, Response)
 from werkzeug.exceptions import BadRequestKeyError
@@ -101,6 +102,32 @@ def calendar():
 
     return render_template("calendar.html", events=passed_events)
 
+@app.route("/calendar/event/<slug>/<stamp>", methods=['GET', 'POST'])
+def calendar_event(slug, stamp):
+    from metaforcefeed.utils import _get_event_str
+    event = g.db.get(_get_event_str(slug, stamp))
+
+    if not event:
+        return abort(404)
+
+    if request.method == 'POST':
+        from metaforcefeed.utils import post_comment_to_event
+        if not session.get('username', None):
+            return redirect(url_for('metaforcefeed.login'))
+
+        username = session['username']
+        created, err = post_comment_to_event(g.db, slug, stamp, request.form['comment'], username)
+
+        if not created:
+            extra = err
+        else:
+            item = g.db.get(_get_summary_str(slug))
+            action_str = 'Commented on "{}, {}".'.format(stamp, slug)
+            log_action(g.db, action_str)
+        event = g.db.get(_get_event_str(slug, stamp))
+
+    return render_template("calendar_event.html", event=event)
+
 @app.route("/calendar/new", methods=['GET', 'POST'])
 def calendar_new():
     error = None
@@ -123,7 +150,8 @@ def calendar_new():
             return redirect(url_for('metaforcefeed.calendar'))
         error = event
 
-    return render_template("calendar_new.html", error=error)
+    today = datetime.today().strftime("%Y-%m-%d")
+    return render_template("calendar_new.html", error=error, today=today)
 
 @app.route("/item/<slug>", methods=['GET', 'POST'])
 def item(slug):
@@ -135,9 +163,9 @@ def item(slug):
     if request.method == 'POST':
         if not session.get('username', None):
             return redirect(url_for('metaforcefeed.login'))
-        from metaforcefeed.utils import post_comment
+        from metaforcefeed.utils import post_comment_to_item
         username = session['username']
-        created, err = post_comment(g.db, slug, request.form['comment'], username)
+        created, err = post_comment_to_item(g.db, slug, request.form['comment'], username)
         if not created:
             extra = err
         else:

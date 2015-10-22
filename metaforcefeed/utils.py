@@ -63,7 +63,7 @@ def ping_summary(connection, slug, expiration):
 
     return (True, summary)
 
-def post_comment(connection, slug, comment, user):
+def post_comment_to_item(connection, slug, comment, user):
     key = _get_summary_str(slug)
     summary = connection.get(key)
 
@@ -78,6 +78,24 @@ def post_comment(connection, slug, comment, user):
     }
     summary['comments'].append(comment_obj)
     connection.set(key, summary)
+
+    return (True, comment)
+
+def post_comment_to_event(connection, slug, stamp, comment, user):
+    key = _get_event_str(slug, stamp)
+    event = connection.get(key)
+
+    if not event:
+        return (False, "Event with that key does not exist.")
+
+    created_at = int(time.mktime(datetime.now().utctimetuple()))
+    comment_obj = {
+        'text': comment,
+        'created_at': created_at,
+        'username': user
+    }
+    event['comments'].append(comment_obj)
+    connection.set(key, event)
 
     return (True, comment)
 
