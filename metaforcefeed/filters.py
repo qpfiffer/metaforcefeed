@@ -2,6 +2,7 @@
 from datetime import datetime
 
 badges = [u"☹", u"♞", u"★", u"☎", u"☂"]
+colors = [u"FF667F", u"FF9966", u"FFE666", u"CCFF66", u"66CCFF"]
 
 def unix_to_human(timestamp_str):
     time = float(timestamp_str)
@@ -13,4 +14,6 @@ def event_to_human(timestamp_str):
 
 def user_badge(username):
     username_hash = hash(username)
-    return u'<span class="user_badge">{}</span>'.format(badges[username_hash % len(badges)])
+    badge = badges[username_hash % len(badges)]
+    color = colors[username_hash % len(colors)]
+    return u'<span style="color: #{}">{}</span>'.format(color, badge)
