@@ -89,7 +89,7 @@ def ping(slug):
     return Response(json.dumps(to_return), mimetype="application/json")
 
 @app.route("/calendar", methods=['GET'])
-def calendar():
+def calendar_root():
     import calendar
     all_events = g.db.get(ALL_EVENTS_LIST) or []
 
