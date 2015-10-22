@@ -90,6 +90,7 @@ def ping(slug):
 
 @app.route("/calendar", methods=['GET'])
 def calendar():
+    import calendar
     all_events = g.db.get(ALL_EVENTS_LIST) or []
 
     passed_events = []
@@ -100,7 +101,14 @@ def calendar():
     passed_events = sorted([x for x in passed_events if x],
         key=lambda x: x['day'], reverse=False)
 
-    return render_template("calendar.html", events=passed_events)
+    calendars = []
+    current_month_int = int(datetime.today().strftime("%m"))
+    for month in [current_month_int - 1, current_month_int, current_month_int + 1]:
+        cal = calendar.HTMLCalendar(calendar.SUNDAY)
+        formatted = cal.formatmonth(2015, month)
+        calendars.append(formatted)
+
+    return render_template("calendar.html", events=passed_events, calendars=calendars)
 
 @app.route("/calendar/event/<slug>/<stamp>", methods=['GET', 'POST'])
 def calendar_event(slug, stamp):
