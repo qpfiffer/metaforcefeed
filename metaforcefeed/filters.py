@@ -6,7 +6,7 @@ colors = [u"FF667F", u"FF9966", u"FFE666", u"CCFF66", u"66CCFF"]
 
 taglines = ['<span style="color: #FFF; background-color: #000;"><span style="color: #FF4ABD;">nijotz</span> | You just manage their addictions until they die</span>',
             '<span style="color: #FFF; background-color: #000;">Bash disinformation campain.</span>',
-            '<span style="color: #4DAFA2; background-color: #000;">// continue on with life!</span>'
+            '<span style="color: #4DAFA2; background-color: #000;"> // continue on with life!! </span>'
             ]
 
 def unix_to_human(timestamp_str):
