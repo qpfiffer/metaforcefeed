@@ -155,7 +155,7 @@ def calendar_new():
         if created:
             action_str = 'Created new event "{}".'.format(name)
             log_action(g.db, action_str)
-            return redirect(url_for('metaforcefeed.calendar'))
+            return redirect(url_for('metaforcefeed.calendar_root'))
         error = event
 
     today = datetime.today().strftime("%Y-%m-%d")
