@@ -25,4 +25,4 @@ def user_badge(username):
 
 def random_tagline(x):
     from random import randint
-    return taglines[randint(0, len(taglines)]
+    return taglines[randint(0, len(taglines))]
