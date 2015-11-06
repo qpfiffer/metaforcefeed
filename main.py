@@ -8,7 +8,7 @@ from olegdb import OlegDB
 from metaforcefeed.routes import app as routes
 from metaforcefeed.utils import random_csrf, auth_user, enable_admin
 from metaforcefeed.conprocs import app as conprocs
-from metaforcefeed.filters import unix_to_human, user_badge, event_to_human
+from metaforcefeed.filters import unix_to_human, user_badge, event_to_human, random_tagline
 import sys, getopt, random, string, json, time
 
 app = Flask('metaforcefeed')
@@ -18,6 +18,7 @@ app.config['CACHE'] = True
 app.session_interface = OlegDBSessionInterface(host='localhost', port=38080, db_name='metaforcefeed')
 app.jinja_env.filters['unix_to_human'] = unix_to_human
 app.jinja_env.filters['user_badge'] = user_badge
+app.jinja_env.filters['random_tagline'] = random_tagline
 app.jinja_env.filters['event_to_human'] = event_to_human
 Markdown(app)
 
