@@ -88,6 +88,10 @@ def ping(slug):
 
     return Response(json.dumps(to_return), mimetype="application/json")
 
+def _timestamp(timestamp_str):
+    x = datetime.fromtimestamp(float(timestamp_str))
+    return x
+
 @app.route("/calendar", methods=['GET'])
 def calendar_root():
     import calendar
@@ -97,9 +101,12 @@ def calendar_root():
     for e_key in all_events:
         passed_events.append(g.db.get(e_key))
 
-    # Filter out Nones and sort by pings:
     passed_events = sorted([x for x in passed_events if x],
         key=lambda x: x['day'], reverse=False)
+
+    happened_events = filter(lambda x: _timestamp(x['day']).date() < datetime.now().date(), passed_events)
+    todays_events = filter(lambda x: _timestamp(x['day']).date() == datetime.now().date(), passed_events)
+    soon_events = filter(lambda x: _timestamp(x['day']).date() > datetime.now().date(), passed_events)
 
     calendars = []
     current_month_int = int(datetime.today().strftime("%m"))
@@ -108,7 +115,8 @@ def calendar_root():
         formatted = cal.formatmonth(2015, month)
         calendars.append(formatted)
 
-    return render_template("calendar.html", events=passed_events, calendars=calendars)
+    return render_template("calendar.html", happened_events=happened_events,
+            todays_events=todays_events, soon_events=soon_events, calendars=calendars)
 
 @app.route("/calendar/event/<slug>/<stamp>", methods=['GET', 'POST'])
 def calendar_event(slug, stamp):
