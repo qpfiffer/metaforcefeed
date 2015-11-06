@@ -141,3 +141,14 @@ button.red {
 .hatred {
 	color: #24BA6D;
 }
+.red {
+	color: #EE3F3F;
+}
+a.cancelled {
+	color: #EE3F3F;
+	text-decoration: line-through;
+}
+a.cancelled:hover {
+	color: #AA001F;
+	text-decoration: line-through;
+}

@@ -118,6 +118,24 @@ def calendar_root():
     return render_template("calendar.html", happened_events=happened_events,
             todays_events=todays_events, soon_events=soon_events, calendars=calendars)
 
+@app.route("/item/<slug>/<stamp>/cancel", methods=['POST'])
+def calendar_event_cancel(slug, stamp):
+    if not slug or not stamp:
+        return abort(404)
+
+    from metaforcefeed.utils import _get_event_str
+    event = g.db.get(_get_event_str(slug, stamp))
+
+    event["cancelled"] = True
+    g.db.set(_get_event_str(slug, stamp), event)
+
+    # Log that we cancelled an event
+    event = g.db.get(_get_event_str(slug, stamp))
+    action_str = 'Cancelled on "{}, {}".'.format(stamp, slug)
+    log_action(g.db, action_str)
+
+    return redirect(url_for('metaforcefeed.root'))
+
 @app.route("/calendar/event/<slug>/<stamp>", methods=['GET', 'POST'])
 def calendar_event(slug, stamp):
     from metaforcefeed.utils import _get_event_str
@@ -137,7 +155,7 @@ def calendar_event(slug, stamp):
         if not created:
             extra = err
         else:
-            item = g.db.get(_get_summary_str(slug))
+            event = g.db.get(_get_event_str(slug, stamp))
             action_str = 'Commented on "{}, {}".'.format(stamp, slug)
             log_action(g.db, action_str)
         event = g.db.get(_get_event_str(slug, stamp))

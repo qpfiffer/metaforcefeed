@@ -18,21 +18,22 @@
                     {% if user.username == event.created_by or user.admin %}
                     <ul id="admin_funcs">
                         <li>
-                            <a id="delete_btn" href="#">Delete</a>
-                            {#
+                            <a id="delete_btn" href="#">Cancel</a>
                             <div class="hidden" id="delete_form">
-                                <form action="{{ url_for('metaforcefeed.delete', slug=item.slug) }}" method="POST">
+                                <form action="{{ url_for('metaforcefeed.calendar_event_cancel', slug=event.slug, stamp=event.day) }}" method="POST">
                                     <input name="_csrf_token" type="hidden" value="{{ csrf_token() }}" >
                                     <button class="red" type="submit">I don't care anymore.</button>
                                 </form>
                                 <button id="nevermind">Nevermind.</button>
                             </div>
-                            #}
                         </li>
                         <li>
                             <a href="#">Edit Idea</a>
                         </li>
                     </ul>
+                    {% endif %}
+                    {% if event.cancelled %}
+                        <p class="red">Event cancelled.</p>
                     {% endif %}
 
                     <p>{{event.description|markdown}}</p>
@@ -63,4 +64,10 @@
         </div>
     </div>
 </div>
+{% endblock %}
+{% block endscripts %}{{ super() }}
+    <script src="{{ url_for('static', filename='js/item.js') }}"></script>
+    <script>
+        item_init();
+    </script>
 {% endblock %}

@@ -189,6 +189,7 @@ def submit_event(connection, day, from_time, to_time, name, description):
         "description": description,
         "api_version": SCHEMA_VERSION,
         "created_by": user["username"],
+        "cancelled": False,
         "comments": [],
     }
 
