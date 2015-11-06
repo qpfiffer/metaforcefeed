@@ -1,5 +1,6 @@
 # -*- coding: UTF-8 -*-
 from datetime import datetime
+import random
 
 badges = [u"☹", u"♞", u"★", u"☎", u"☂", u"📱", u"📴", u"📶", u"📼", u"🔀"]
 colors = [u"FF667F", u"FF9966", u"FFE666", u"CCFF66", u"66CCFF"]
@@ -24,5 +25,4 @@ def user_badge(username):
     return u'<span style="color: #{}">{}</span>'.format(color, badge)
 
 def random_tagline(x):
-    from random import randint
-    return taglines[randint(0, len(taglines))]
+    return random.choice(taglines)
