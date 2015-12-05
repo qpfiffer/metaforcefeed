@@ -11,7 +11,13 @@
                 <div class="content">
                     <!-- <h1 id="main_header"><a href="{{ url_for('metaforcefeed.root') }}">#metaforcefeed</a></h1> "Bash disinformation campaign."</span> -->
                     <h2 id="main_header"><a href="{{ url_for('metaforcefeed.root') }}">#metaforcefeed</a></h2>
-                    {{ ""|random_tagline|safe }}
+                    {% set taglines -%}
+                    <span style="color: #FFF; background-color: #000;"><span style="color: #FF4ABD;">nijotz</span> | You just manage their addictions until they die</span>
+                    <span style="color: #FFF; background-color: #000;">Bash disinformation campain.</span>
+                    <span style="color: #EE1F1F; background-color: #000;">Happy void day!</span>
+                    <span style="color: #4DAFA2; background-color: #000;"> // continue on with life!! </span>
+                    {%- endset %}
+                    {{ taglines.split("\n") | random | safe }}
                 </div>
             </div>
             <div class="col-5-12">
