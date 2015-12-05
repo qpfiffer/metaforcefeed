@@ -8,7 +8,7 @@ from olegdb import OlegDB
 from metaforcefeed.routes import app as routes
 from metaforcefeed.utils import random_csrf, auth_user, enable_admin
 from metaforcefeed.conprocs import app as conprocs
-from metaforcefeed.filters import unix_to_human, user_badge, event_to_human, random_tagline
+from metaforcefeed.filters import unix_to_human, user_badge, event_to_human
 import sys, getopt, random, string, json, time
 
 app = Flask('metaforcefeed')
