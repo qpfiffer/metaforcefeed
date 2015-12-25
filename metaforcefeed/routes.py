@@ -110,7 +110,7 @@ def calendar_root():
 
     calendars = []
     current_month_int = int(datetime.today().strftime("%m"))
-    for month in [current_month_int - 1, current_month_int, current_month_int + 1]:
+    for month in [(current_month_int - 1) % 12, current_month_int, (current_month_int + 1) % 12]:
         cal = calendar.HTMLCalendar(calendar.SUNDAY)
         formatted = cal.formatmonth(2015, month)
         calendars.append(formatted)
