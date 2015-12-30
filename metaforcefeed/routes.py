@@ -50,8 +50,8 @@ def calendar_event_ack(slug, stamp):
     if not slug:
         return abort(404)
 
-    from metaforcefeed.utils import ack_to_event, _get_event_str
-    created, err = ack_to_event(g.db, slug, stamp, user)
+    from metaforcefeed.utils import ack_event, _get_event_str
+    created, err = ack_event(g.db, slug, stamp, user)
 
     if not created:
         extra = err
@@ -73,8 +73,8 @@ def calendar_event_de_ack(slug, stamp):
     if not slug:
         return abort(404)
 
-    from metaforcefeed.utils import de_ack_to_event, _get_event_str
-    created, err = de_ack_to_event(g.db, slug, stamp, user)
+    from metaforcefeed.utils import de_ack_event, _get_event_str
+    created, err = de_ack_event(g.db, slug, stamp, user)
 
     if not created:
         extra = err
@@ -206,7 +206,10 @@ def calendar_event(slug, stamp):
             log_action(g.db, action_str)
         event = g.db.get(_get_event_str(slug, stamp))
 
-    return render_template("calendar_event.html", event=event)
+    acks = [x["username"] for x in event["ACKs"]]
+    deacks = [y["username"] for y in event["DEACKs"]]
+
+    return render_template("calendar_event.html", event=event, acks=acks, deacks=deacks)
 
 @app.route("/calendar/new", methods=['GET', 'POST'])
 def calendar_new():

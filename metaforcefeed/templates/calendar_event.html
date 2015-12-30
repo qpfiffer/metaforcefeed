@@ -31,7 +31,7 @@
                             <a href="#">Edit Idea</a>
                         </li>
                         <li>
-                            {% if user.username not in event.ACKs %}
+                            {% if user.username not in acks or user.username in deacks %}
                             <div>
                                 <form action="{{ url_for('metaforcefeed.calendar_event_ack', slug=event.slug, stamp=event.day) }}" method="POST">
                                     <input name="_csrf_token" type="hidden" value="{{ csrf_token() }}" >
@@ -40,7 +40,7 @@
                             </div>
                             {% else %}
                             <div>
-                                <form action="{{ url_for('metaforcefeed.calendar_event_ack', slug=event.slug, stamp=event.day) }}" method="POST">
+                                <form action="{{ url_for('metaforcefeed.calendar_event_de_ack', slug=event.slug, stamp=event.day) }}" method="POST">
                                     <input name="_csrf_token" type="hidden" value="{{ csrf_token() }}" >
                                     <button class="red" type="submit">DE-ACK</button>
                                 </form>
