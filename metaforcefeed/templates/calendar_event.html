@@ -30,6 +30,23 @@
                         <li>
                             <a href="#">Edit Idea</a>
                         </li>
+                        <li>
+                            {% if user.username not in event.ACKs %}
+                            <div>
+                                <form action="{{ url_for('metaforcefeed.calendar_event_ack', slug=event.slug, stamp=event.day) }}" method="POST">
+                                    <input name="_csrf_token" type="hidden" value="{{ csrf_token() }}" >
+                                    <button type="submit">ACK to event.</button>
+                                </form>
+                            </div>
+                            {% else %}
+                            <div>
+                                <form action="{{ url_for('metaforcefeed.calendar_event_ack', slug=event.slug, stamp=event.day) }}" method="POST">
+                                    <input name="_csrf_token" type="hidden" value="{{ csrf_token() }}" >
+                                    <button class="red" type="submit">DE-ACK</button>
+                                </form>
+                            </div>
+                            {% endif %}
+                        </li>
                     </ul>
                     {% endif %}
                     {% if event.cancelled %}

@@ -39,6 +39,52 @@ def root():
 
     return render_template("index.html", items=passed_items, all_actions=actions)
 
+@app.route("/ack/<slug>/<stamp>", methods=['POST'])
+def calendar_event_ack(slug, stamp):
+    to_return = { 'success': True, 'error': "" }
+    user = get_user()['user']
+
+    if not user:
+        return abort(503)
+
+    if not slug:
+        return abort(404)
+
+    from metaforcefeed.utils import ack_to_event, _get_event_str
+    created, err = ack_to_event(g.db, slug, stamp, user)
+
+    if not created:
+        extra = err
+    else:
+        event = g.db.get(_get_event_str(slug, stamp))
+        action_str = '{} ACK\'d to "{}, {}".'.format(user["username"], stamp, slug)
+        log_action(g.db, action_str)
+
+    return redirect(url_for('metaforcefeed.calendar_event', slug=slug, stamp=stamp))
+
+@app.route("/deack/<slug>/<stamp>", methods=['POST'])
+def calendar_event_de_ack(slug, stamp):
+    to_return = { 'success': True, 'error': "" }
+    user = get_user()['user']
+
+    if not user:
+        return abort(503)
+
+    if not slug:
+        return abort(404)
+
+    from metaforcefeed.utils import de_ack_to_event, _get_event_str
+    created, err = de_ack_to_event(g.db, slug, stamp, user)
+
+    if not created:
+        extra = err
+    else:
+        event = g.db.get(_get_event_str(slug, stamp))
+        action_str = '{} DE-ACK\'d "{}, {}".'.format(user["username"], stamp, slug)
+        log_action(g.db, action_str)
+
+    return redirect(url_for('metaforcefeed.calendar_event', slug=slug, stamp=stamp))
+
 @app.route("/ping/<slug>", methods=['POST'])
 def ping(slug):
     to_return = { 'success': True, 'error': "" }

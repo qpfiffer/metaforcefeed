@@ -63,6 +63,12 @@ def ping_summary(connection, slug, expiration):
 
     return (True, summary)
 
+def ack_to_event(connection, slug, stamp, user):
+    return (True, "")
+
+def de_ack_to_event(connection, slug, stamp, user):
+    return (True, "")
+
 def post_comment_to_item(connection, slug, comment, user):
     key = _get_summary_str(slug)
     summary = connection.get(key)
@@ -191,6 +197,7 @@ def submit_event(connection, day, from_time, to_time, name, description):
         "created_by": user["username"],
         "cancelled": False,
         "comments": [],
+        "ACKs": [],
     }
 
     connection.set(key, event)
