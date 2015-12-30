@@ -206,8 +206,15 @@ def calendar_event(slug, stamp):
             log_action(g.db, action_str)
         event = g.db.get(_get_event_str(slug, stamp))
 
-    acks = [x["username"] for x in event["ACKs"]]
-    deacks = [y["username"] for y in event["DEACKs"]]
+    try:
+        acks = [x["username"] for x in event["ACKs"]]
+    except:
+        acks = []
+
+    try:
+        deacks = [y["username"] for y in event["DEACKs"]]
+    except:
+        deacks = []
 
     return render_template("calendar_event.html", event=event, acks=acks, deacks=deacks)
 

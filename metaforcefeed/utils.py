@@ -73,6 +73,9 @@ def ack_event(connection, slug, stamp, user):
     if event.get("ACKs", False) == False:
         event["ACKs"] = []
 
+    if event.get("DEACKs", False) == False:
+        event["DEACKs"] = []
+
     created_at = int(time.mktime(datetime.now().utctimetuple()))
     already_acked = user["username"] in [y["username"] for y in event["ACKs"]]
     already_de_acked = user["username"] in [y["username"] for y in event["DEACKs"]]

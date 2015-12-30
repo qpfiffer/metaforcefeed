@@ -31,6 +31,7 @@
                             <a href="#">Edit Idea</a>
                         </li>
                         {% endif %}
+                        {% if user %}
                         <li>
                             {% if user.username not in acks or user.username in deacks %}
                             <div>
@@ -48,10 +49,15 @@
                             </div>
                             {% endif %}
                         </li>
+                        {% endif %}
                     </ul>
                     <p>Users ACK'd:</p>
                     {% for ackd_user in acks %}
-                        <ul><a href="{{ url_for('metaforcefeed.user_history', username=ackd_user) }}">{{ackd_user}}</a> {{ackd_user|user_badge|safe}}</ul>
+                        {% if ackd_user in deacks %}
+                            <ul><a class="cancelled" href="{{ url_for('metaforcefeed.user_history', username=ackd_user) }}">{{ackd_user}}</a> {{ackd_user|user_badge|safe}}</ul>
+                        {% else %}
+                            <ul><a href="{{ url_for('metaforcefeed.user_history', username=ackd_user) }}">{{ackd_user}}</a> {{ackd_user|user_badge|safe}}</ul>
+                        {% endif %}
                     {% endfor %}
                     {% if event.cancelled %}
                         <p class="RAD_RED">Event cancelled.</p>
