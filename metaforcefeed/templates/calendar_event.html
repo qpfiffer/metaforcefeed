@@ -15,8 +15,8 @@
                     <span>{{event.comments|length}} ✍</span>
                     </p>
 
-                    {% if user.username == event.created_by or user.admin %}
                     <ul id="admin_funcs">
+                        {% if user.username == event.created_by or user.admin %}
                         <li>
                             <a id="delete_btn" href="#">Cancel</a>
                             <div class="hidden" id="delete_form">
@@ -30,6 +30,7 @@
                         <li>
                             <a href="#">Edit Idea</a>
                         </li>
+                        {% endif %}
                         <li>
                             {% if user.username not in acks or user.username in deacks %}
                             <div>
@@ -48,7 +49,10 @@
                             {% endif %}
                         </li>
                     </ul>
-                    {% endif %}
+                    <p>Users ACK'd:</p>
+                    {% for ackd_user in acks %}
+                        <ul><a href="{{ url_for('metaforcefeed.user_history', username=ackd_user) }}">{{ackd_user}}</a> {{ackd_user|user_badge|safe}}</ul>
+                    {% endfor %}
                     {% if event.cancelled %}
                         <p class="RAD_RED">Event cancelled.</p>
                     {% endif %}
