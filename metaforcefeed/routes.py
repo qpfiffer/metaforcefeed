@@ -216,7 +216,9 @@ def calendar_event(slug, stamp):
     except:
         deacks = []
 
-    return render_template("calendar_event.html", event=event, acks=acks, deacks=deacks)
+    all_users_involved = set(acks + deacks)
+
+    return render_template("calendar_event.html", event=event, acks=acks, deacks=deacks, all_users_involved=all_users_involved)
 
 @app.route("/calendar/new", methods=['GET', 'POST'])
 def calendar_new():

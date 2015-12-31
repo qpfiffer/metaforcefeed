@@ -34,25 +34,28 @@
                         {% if user %}
                         <li>
                             {% if user.username not in acks or user.username in deacks %}
-                            <div>
+                            <div style="display: inline-block;">
                                 <form action="{{ url_for('metaforcefeed.calendar_event_ack', slug=event.slug, stamp=event.day) }}" method="POST">
                                     <input name="_csrf_token" type="hidden" value="{{ csrf_token() }}" >
-                                    <button type="submit">ACK to event.</button>
-                                </form>
-                            </div>
-                            {% else %}
-                            <div>
-                                <form action="{{ url_for('metaforcefeed.calendar_event_de_ack', slug=event.slug, stamp=event.day) }}" method="POST">
-                                    <input name="_csrf_token" type="hidden" value="{{ csrf_token() }}" >
-                                    <button class="red" type="submit">DE-ACK</button>
+                                    <button type="submit">ACK</button>
                                 </form>
                             </div>
                             {% endif %}
+                            <div style="display: inline-block;">
+                                <form action="{{ url_for('metaforcefeed.calendar_event_de_ack', slug=event.slug, stamp=event.day) }}" method="POST">
+                                    <input name="_csrf_token" type="hidden" value="{{ csrf_token() }}" >
+                                    {% if user.username not in acks and user.username not in deacks %}
+                                    <button class="red" type="submit">NACK</button>
+                                    {% elif user.username in acks and user.username not in deacks %}
+                                    <button class="red" type="submit">DE-ACK</button>
+                                    {% endif %}
+                                </form>
+                            </div>
                         </li>
                         {% endif %}
                     </ul>
-                    <p>Users ACK'd:</p>
-                    {% for ackd_user in acks %}
+                    <h2>ACK'd Users</h2>
+                    {% for ackd_user in all_users_involved %}
                         {% if ackd_user in deacks %}
                             <ul><a class="cancelled" href="{{ url_for('metaforcefeed.user_history', username=ackd_user) }}">{{ackd_user}}</a> {{ackd_user|user_badge|safe}}</ul>
                         {% else %}
@@ -63,6 +66,7 @@
                         <p class="RAD_RED">Event cancelled.</p>
                     {% endif %}
 
+                    <h2>Description</h2>
                     <p>{{event.description|markdown}}</p>
                 </div>
                 </li>
