@@ -57,7 +57,7 @@ def calendar_event_ack(slug, stamp):
         extra = err
     else:
         event = g.db.get(_get_event_str(slug, stamp))
-        action_str = '{} ACK\'d to "{}, {}".'.format(user["username"], stamp, slug)
+        action_str = 'ACK\'d to "{}, {}".'.format(stamp, slug)
         log_action(g.db, action_str)
 
     return redirect(url_for('metaforcefeed.calendar_event', slug=slug, stamp=stamp))
@@ -80,7 +80,7 @@ def calendar_event_de_ack(slug, stamp):
         extra = err
     else:
         event = g.db.get(_get_event_str(slug, stamp))
-        action_str = '{} DE-ACK\'d "{}, {}".'.format(user["username"], stamp, slug)
+        action_str = 'DE-ACK\'d "{}, {}".'.format(stamp, slug)
         log_action(g.db, action_str)
 
     return redirect(url_for('metaforcefeed.calendar_event', slug=slug, stamp=stamp))
