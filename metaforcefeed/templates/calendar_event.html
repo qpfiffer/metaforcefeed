@@ -9,6 +9,7 @@
                     <h3>
                         {{event.name}}
                     </h3>
+                    <h2>{{event.from_time}} - {{event.to_time}}</h2>
                     <p class="submitted_by">
                     <span class="hatred">✄</span>
                     <span><a href="{{ url_for('metaforcefeed.user_history', username=event.created_by) }}">{{event.created_by}}</a> {{event.created_by|user_badge|safe}}</span>
