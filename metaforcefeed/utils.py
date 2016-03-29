@@ -63,6 +63,67 @@ def ping_summary(connection, slug, expiration):
 
     return (True, summary)
 
+def ack_event(connection, slug, stamp, user):
+    key = _get_event_str(slug, stamp)
+    event = connection.get(key)
+
+    if not event:
+        return (False, "Event with that key does not exist.")
+
+    if event.get("ACKs", False) == False:
+        event["ACKs"] = []
+
+    if event.get("DEACKs", False) == False:
+        event["DEACKs"] = []
+
+    created_at = int(time.mktime(datetime.now().utctimetuple()))
+    already_acked = user["username"] in [y["username"] for y in event["ACKs"]]
+    already_de_acked = user["username"] in [y["username"] for y in event["DEACKs"]]
+    if not already_acked:
+        ack_obj = {
+            'created_at': created_at,
+            'username': user["username"]
+        }
+        event['ACKs'].append(ack_obj)
+    elif already_de_acked:
+        # Remove the old one and update.
+        event['ACKs'] = [x for x in event['ACKs'] if x['username'] != user['username']]
+        ack_obj = {
+            'created_at': created_at,
+            'username': user["username"]
+        }
+        event['ACKs'].append(ack_obj)
+
+    if already_de_acked:
+        event['DEACKs'] = [x for x in event['DEACKs'] if x['username'] != user['username']]
+
+    connection.set(key, event)
+
+    return (True, "")
+
+def de_ack_event(connection, slug, stamp, user):
+    key = _get_event_str(slug, stamp)
+    event = connection.get(key)
+
+    if not event:
+        return (False, "Event with that key does not exist.")
+
+    if event.get("DEACKs", False) == False:
+        event["DEACKs"] = []
+
+    created_at = int(time.mktime(datetime.now().utctimetuple()))
+    already_de_acked = user in [y["username"] for y in event["DEACKs"]]
+    if not already_de_acked:
+        de_ack_obj = {
+            'created_at': created_at,
+            'username': user["username"]
+        }
+        event['DEACKs'].append(de_ack_obj)
+
+    connection.set(key, event)
+
+    return (True, "")
+
 def post_comment_to_item(connection, slug, comment, user):
     key = _get_summary_str(slug)
     summary = connection.get(key)
@@ -191,6 +252,8 @@ def submit_event(connection, day, from_time, to_time, name, description):
         "created_by": user["username"],
         "cancelled": False,
         "comments": [],
+        "ACKs": [],
+        "DEACKs": [],
     }
 
     connection.set(key, event)

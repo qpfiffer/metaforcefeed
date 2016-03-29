@@ -6,9 +6,9 @@
             <ul id="item_list">
                 <li>
                 <div class="item">
-                    <h3>
-                        {{event.name}}
-                    </h3>
+                    <h3>{{event.day|event_to_human}}: <a class="{% if event.cancelled %}cancelled{%endif%}" href="{{ url_for('metaforcefeed.calendar_event', slug=event.slug, stamp=event.day) }}">
+                            {{event.name}}
+                    </a></h3>
                     <h2>{{event.from_time}} - {{event.to_time}}</h2>
                     <p class="submitted_by">
                     <span class="hatred">✄</span>
@@ -16,8 +16,8 @@
                     <span>{{event.comments|length}} ✍</span>
                     </p>
 
-                    {% if user.username == event.created_by or user.admin %}
                     <ul id="admin_funcs">
+                        {% if user.username == event.created_by or user.admin %}
                         <li>
                             <a id="delete_btn" href="#">Cancel</a>
                             <div class="hidden" id="delete_form">
@@ -31,12 +31,43 @@
                         <li>
                             <a href="#">Edit Idea</a>
                         </li>
+                        {% endif %}
+                        {% if user %}
+                        <li>
+                            {% if user.username not in acks or user.username in deacks %}
+                            <div style="display: inline-block;">
+                                <form action="{{ url_for('metaforcefeed.calendar_event_ack', slug=event.slug, stamp=event.day) }}" method="POST">
+                                    <input name="_csrf_token" type="hidden" value="{{ csrf_token() }}" >
+                                    <button type="submit">ACK</button>
+                                </form>
+                            </div>
+                            {% endif %}
+                            <div style="display: inline-block;">
+                                <form action="{{ url_for('metaforcefeed.calendar_event_de_ack', slug=event.slug, stamp=event.day) }}" method="POST">
+                                    <input name="_csrf_token" type="hidden" value="{{ csrf_token() }}" >
+                                    {% if user.username not in acks and user.username not in deacks %}
+                                    <button class="red" type="submit">NACK</button>
+                                    {% elif user.username in acks and user.username not in deacks %}
+                                    <button class="red" type="submit">DE-ACK</button>
+                                    {% endif %}
+                                </form>
+                            </div>
+                        </li>
+                        {% endif %}
                     </ul>
-                    {% endif %}
+                    <h2>ACK'd Users</h2>
+                    {% for ackd_user in all_users_involved %}
+                        {% if ackd_user in deacks %}
+                            <ul><a class="cancelled" href="{{ url_for('metaforcefeed.user_history', username=ackd_user) }}">{{ackd_user}}</a> {{ackd_user|user_badge|safe}}</ul>
+                        {% else %}
+                            <ul><a href="{{ url_for('metaforcefeed.user_history', username=ackd_user) }}">{{ackd_user}}</a> {{ackd_user|user_badge|safe}}</ul>
+                        {% endif %}
+                    {% endfor %}
                     {% if event.cancelled %}
                         <p class="RAD_RED">Event cancelled.</p>
                     {% endif %}
 
+                    <h2>Description</h2>
                     <p>{{event.description|markdown}}</p>
                 </div>
                 </li>
